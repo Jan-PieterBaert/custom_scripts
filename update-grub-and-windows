@@ -1,0 +1,3 @@
+sudo mount /dev/sda1 /windows_boot_mnt
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo umount /dev/sda1

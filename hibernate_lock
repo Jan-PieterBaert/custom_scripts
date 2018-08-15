@@ -1,0 +1,5 @@
+echo "System will lock in 5 seconds"
+sleep 5
+
+fancy_lock
+systemctl hibernate
