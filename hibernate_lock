@@ -1,5 +1,6 @@
-echo "System will lock in 5 seconds"
-sleep 5
+echo "System will hibernate"
+#echo "System will hiberate in 5 seconds"
+#sleep 5
 
 fancy_lock
 systemctl hibernate
