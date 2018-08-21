@@ -1,1 +1,2 @@
-i3lock-fancy -t "Type password to unlock" -f Noto-Sans-Black
+#i3lock-fancy -t "Type password to unlock" -f Noto-Sans-Black
+i3lock -i i3lock-background.png
