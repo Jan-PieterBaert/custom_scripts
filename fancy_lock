@@ -8,7 +8,8 @@ name=i3lock-background
 #give the wished extension
 extension=png
 
-numberOfPics=$(ls $dir | grep ^$name[0-9]*.$extension$ | wc -l)
+numberOfPics=$(find $dir -regextype egrep -regex "$dir/$name[0-9]*.$extension" | wc -l)
+echo $numberOfPics
 echo "Number of options for lock-screen picture: $numberOfPics"
 
 image_path=$dir/$name$(($RANDOM % $numberOfPics + 1)).png
