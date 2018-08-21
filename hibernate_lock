@@ -2,5 +2,11 @@ echo "System will hibernate"
 #echo "System will hiberate in 5 seconds"
 #sleep 5
 
+#mute the computer so that when restarted no random noises will appear
+amixer set Master mute
+
+#lock the system
 fancy_lock
+
+#hibernate the system
 systemctl hibernate
