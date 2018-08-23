@@ -1,6 +1,9 @@
 #!/bin/bash
 #get a random lockscreen image
-image_path=$(random_lockscreen)
+
+image_path=${1:-$(random_lockscreen)}
+
+echo $image_path
 
 #lock the computer
-i3lock -i $image_path
+#i3lock -i $image_path

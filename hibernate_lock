@@ -1,4 +1,5 @@
 #!/bin/bash
+grub_location=/home/jan-pieter/Pictures/grub-options/grub.png
 
 echo "System will hibernate"
 #echo "System will hiberate in 5 seconds"
@@ -8,12 +9,11 @@ echo "System will hibernate"
 amixer set Master mute &
 
 #lock the system
-fancy_lock
+fancy_lock $grub_location
 
 #hibernate the system
 systemctl hibernate
 
 
 #change grub background to some random out of the lockscreen folder
-cp $(random_lockscreen) /home/jan-pieter/Pictures/grub-options/grub.png &
-
+cp $(random_lockscreen) $grub_location &
