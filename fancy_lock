@@ -1,17 +1,6 @@
 #!/bin/bash
-#give the directory where the optional lockscreen images are saved
-dir=/usr/local/bin/lockscreen
+#get a random lockscreen image
+image_path=$(random_lockscreen)
 
-#give the name of the file
-name=i3lock-background
-
-#give the wished extension
-extension=png
-
-numberOfPics=$(find $dir -regextype egrep -regex "$dir/$name[0-9]*.$extension" | wc -l)
-echo $numberOfPics
-echo "Number of options for lock-screen picture: $numberOfPics"
-
-image_path=$dir/$name$(($RANDOM % $numberOfPics + 1)).png
-
+#lock the computer
 i3lock -i $image_path

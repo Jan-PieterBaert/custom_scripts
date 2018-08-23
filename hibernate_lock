@@ -12,3 +12,8 @@ fancy_lock
 
 #hibernate the system
 systemctl hibernate
+
+
+#change grub background to some random out of the lockscreen folder
+cp $(random_lockscreen) /home/jan-pieter/Pictures/grub-options/grub.png &
+
