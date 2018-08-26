@@ -3,7 +3,7 @@
 dir=/usr/local/bin/lockscreen
 
 #give the name of the file
-name=i3lock-background
+name=background_
 
 #give the wished extension
 extension=png

@@ -1,0 +1,16 @@
+#!/bin/sh
+grub_location=/home/jan-pieter/Pictures/grub-options/grub.png
+
+case $1/$2 in
+	#mute the volume
+	pre/*)
+	amixer set Master mute &
+	;;
+
+	#wait 2 minutes after waking up, then change the backgrounds
+	post/*)
+	sleep 120
+	change_backgrounds &
+	;;
+esac
+
