@@ -1,9 +1,12 @@
 #!/bin/bash
 grub_location=/usr/local/bin/lockscreen/grub.png
 background_location=/usr/local/bin/lockscreen/background.png
+
 rm $grub_location
+ln -s $(/usr/local/bin/random_lockscreen) $grub_location &
+
 rm $background_location
-ln -s $(/usr/local/bin/random_lockscreen) $grub_location
-ln -s $(/usr/local/bin/random_lockscreen) $background_location
+ln -s $(/usr/local/bin/random_lockscreen) $background_location &
+
 echo $grub_location >> /home/jan-pieter/test
 echo $background_location >> /home/jan-pieter/test

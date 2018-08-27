@@ -103,9 +103,10 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias freeh="free -h"
 alias freem="free -m"
+alias cls=clear
+alias dir=ls -al
+alias vim=nvim
 
-
-POWERLEVEL9K_MODE='awesome-fontconfig'
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs battery)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(load ram swap status background_jobs time)
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
@@ -113,6 +114,3 @@ POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K_MULTILINE_FIRST_PROMT_PREFIX=''
 
 
-if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        source /etc/profile.d/vte.sh
-fi
