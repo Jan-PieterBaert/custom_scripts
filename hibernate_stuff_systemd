@@ -9,8 +9,7 @@ case $1/$2 in
 
 	#wait 2 minutes after waking up, then change the backgrounds
 	post/*)
-	sleep 120
-	change_backgrounds &
+	#change_backgrounds 120 &
 	;;
 esac
 
