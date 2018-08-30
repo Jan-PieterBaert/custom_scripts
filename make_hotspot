@@ -1,6 +1,6 @@
 #!/bin/bash
 #the option flags
-optspec=":-:hi:o:n:p:s"
+optspec=":-:hi:o:n:p:sr:"
 
 #specify to which file error and output should be written
 ERRORFILE=/home/jan-pieter/hotspot_error_file
@@ -25,12 +25,13 @@ function showSyntax {
 	-i [input-internet-port]
 	-o [output-internet-port]
 	-n [network-name]
-	-p [password] 
+	-p [password]
+	-r [random-password-of-given-length-arg] 
 	--start: to start a new hotspot
 	--stop: to stop all running instances on the input-internet-port
 	--list-options: to list all network interfaces availible to use
 	--list-running: to list all currently running instances in create_ap
-	--random-password: to get a random password with length $LENGTH"
+	--random-password: to get a random password with length given with option r, default length is $LENGTH"
 	exit $1
 }
 
@@ -50,12 +51,13 @@ do
 			stop) STOP=1 ;;
 			random-password) RANDOM_PASSWORD=1 ;;
 		esac ;;
-		
 		h) showSyntax 0 ;;
 		i) IN=$OPTARG ;;
 		o) OUT=$OPTARG ;;
 		n) NETWORKNAME=$OPTARG ;;
 		p) PASSWORD=$OPTARG ;;
+		r) RANDOM_PASSWORD=1
+		   LENGTH=$((10#$OPTARG)) ;;
 		s) STOP=1 ;;
 		\?) showSyntax 1 ;;
 	esac
