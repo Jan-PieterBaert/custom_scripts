@@ -19,6 +19,9 @@ RANDOM_PASSWORD=0
 #initialize the password length
 LENGTH=12
 
+#regex to validate numerical arguments
+NRCHECK='^[0-9]+$'
+
 #a function to show the syntax of the script
 function showSyntax {
 	echo "this is a frontend for create_ap, it is used to create hotspots, flags are
@@ -26,7 +29,7 @@ function showSyntax {
 	-o [output-internet-port]
 	-n [network-name]
 	-p [password]
-	-r [random-password-of-given-length-arg] 
+	-r [random-password-of-given-length-arg]
 	--start: to start a new hotspot
 	--stop: to stop all running instances on the input-internet-port
 	--list-options: to list all network interfaces availible to use
@@ -57,7 +60,11 @@ do
 		n) NETWORKNAME=$OPTARG ;;
 		p) PASSWORD=$OPTARG ;;
 		r) RANDOM_PASSWORD=1
-		   LENGTH=$((10#$OPTARG)) ;;
+		   if [[ $OPTARG =~ $NRCHECK ]] ; then LENGTH=$((10#$OPTARG))
+		   else
+			echo "invalid length, default value $LENGTH used instead"
+		   fi
+		;;
 		s) STOP=1 ;;
 		\?) showSyntax 1 ;;
 	esac
