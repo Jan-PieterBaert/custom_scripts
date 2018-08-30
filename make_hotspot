@@ -63,8 +63,7 @@ do
 		   if [[ $OPTARG =~ $NRCHECK ]] ; then LENGTH=$((10#$OPTARG))
 		   else
 			echo "invalid length, default value $LENGTH used instead"
-		   fi
-		;;
+		   fi ;;
 		s) STOP=1 ;;
 		\?) showSyntax 1 ;;
 	esac
