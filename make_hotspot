@@ -14,6 +14,7 @@ PASSWORD="12345679"
 #initialize some booleans
 START=0
 STOP=0
+STOPALL=0
 RANDOM_PASSWORD=0
 
 #initialize the password length
@@ -31,7 +32,8 @@ function showSyntax {
 	-p [password]
 	-r [random-password-of-given-length-arg]
 	--start: to start a new hotspot
-	--stop: to stop all running instances on the input-internet-port
+	--stop: to stop all running instances on the input-internet-ports
+	--stop-all-running: to stop all running instances on all internet-ports
 	--list-options: to list all network interfaces availible to use
 	--list-running: to list all currently running instances in create_ap
 	--random-password: to get a random password with length given with option r, default length is $LENGTH"
@@ -43,6 +45,10 @@ function list_options {
 	ip addr | grep "^[0-9]: [a-zA-Z0-9]*: <" | sed 's/^[0-9]*: \([a-zA-Z0-9]*\).*$/\1/g' | sed ':a;N;$!ba;s/\n/, /g'
 }
 
+function stop_on_instance {
+	sudo create_ap --stop $1
+}
+
 while getopts $optspec arg
 do
 	case $arg in #process the flags provided in $optspec
@@ -52,6 +58,7 @@ do
 			list-running) create_ap --list-running; exit ;;
 			start) START=1 ;;
 			stop) STOP=1 ;;
+			stop-all-running) STOPALL=1 ;;
 			random-password) RANDOM_PASSWORD=1 ;;
 		esac ;;
 		h) showSyntax 0 ;;
@@ -69,6 +76,17 @@ do
 	esac
 done
 
+#stop all running instances on all input-internet-ports 
+if [ $((STOPALL)) -eq 1 ]
+then
+	to_stop=$(list_options | sed 's/, /\n/g')
+	for instance in $to_stop
+	do
+		stop_on_instance $instance
+	done
+	exit
+fi
+
 #change the password to a random string if asked
 if [ $(($RANDOM_PASSWORD)) -eq 1 ]
 then
@@ -82,7 +100,7 @@ then
 fi
 
 #stop any current running hotspot on the $IN port
-sudo create_ap --stop $IN
+stop_on_instance $IN
 
 #if a hotspot needs to be started, start it using the provided or default arguments
 if [ $(($START)) -eq 1 ]
