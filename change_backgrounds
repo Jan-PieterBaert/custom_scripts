@@ -1,16 +1,16 @@
 #!/bin/bash
 sleepTime=${1:0}
-grub_location=/usr/local/bin/lockscreen/grub.png
-background_location=/usr/local/bin/lockscreen/background.png
+grub_location=/home/jan-pieter/custum_scripts/lockscreen/grub.png
+background_location=/home/jan-pieter/custum_scripts/lockscreen/background.png
 
 echo $(date) >> /home/jan-pieter/test
 sleep $(($sleepTime))
 
 rm $grub_location
-ln -s $(/usr/local/bin/random_lockscreen) $grub_location &
+ln -s $(random_lockscreen) $grub_location &
 
 rm $background_location
-ln -s $(/usr/local/bin/random_lockscreen) $background_location &
+ln -s $(random_lockscreen) $background_location &
 
 echo $(date) >> /home/jan-pieter/test
 echo $grub_location >> /home/jan-pieter/test

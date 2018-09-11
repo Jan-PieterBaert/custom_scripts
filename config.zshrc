@@ -1,3 +1,4 @@
+export LANG=en_US.UTF-8
 export TERM="xterm-256color"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -106,6 +107,8 @@ alias freem="free -m"
 alias cls=clear
 alias dir=ls -al
 alias vim=nvim
+alias backdown_yay="yay -S --needed $(cat /home/jan-pieter/custum_scripts/pkglist.txt)"
+alias backup_yay="yay -Q > /home/jan-pieter/custum_scripts/pkglist.txt"
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs battery)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(load ram swap status background_jobs time)
