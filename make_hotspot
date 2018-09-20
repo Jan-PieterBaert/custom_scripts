@@ -1,121 +1,100 @@
-#!/bin/bash
-#the option flags
-optspec=":-:hi:o:n:p:sr:e:"
+#!/bin/env python3
+import argparse
+import random
+import re
+import string
+import subprocess
 
-#specify to which file error and output should be written
-ERRORFILE=/home/jan-pieter/hotspot_error_file
+default_input = "wlp2s0"
+default_output = "wlp2s0"
+default_network = "eduroam314"
+default_password = "12345679"
+random_password = False
+default_errorfile = "/home/jan-pieter/hotspot_error_file"
+default_random_length = 12
 
-#default the in and out to the wifi-port and set a default name and password
-IN=wlp2s0
-OUT=wlp2s0
-NETWORKNAME="eduroam314"
-PASSWORD="12345679"
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input-internet-port",
+                    help="specifiy which internet port should be used to receive the internet",
+                    default=default_input, nargs=1)
+parser.add_argument("-o", "--output-internet-port",
+                    help="specifiy which internet port should be used to send the internet",
+                    default=default_output, nargs=1)
+parser.add_argument("-n", "--network-name", help="specify what the name of the network should be",
+                    default=default_network, nargs=1)
+parser.add_argument("-p", "--password", help="specify what the password should be",
+                    default=default_password, nargs=1)
+parser.add_argument("--errorfile", help="specify to which errorfile errors and output should be written",
+                    default=default_errorfile, nargs=1)
+parser.add_argument("--list-options", action="store_true",
+                    help="list all options for the network-interfaces")
+parser.add_argument("--list-running", action="store_true",
+                    help="list all running hotspots")
+parser.add_argument("--random-password", action="store_true",
+                    help="get a random password, with given length or default {}".format(default_random_length))
+parser.add_argument("--random-password-length",
+                    help="give the length",
+                    default=default_random_length, nargs=1, type=int)
+group = parser.add_mutually_exclusive_group()
+group.add_argument("--start", action="store_true",
+                   help="start the hotspot on the input-interface, first stopping all networks on that interface")
+group.add_argument("--stop", action="store_true",
+                   help="stop all networks on the input-interface")
+group.add_argument("--stop-all-running", action="store_true",
+                   help="stop all networks on all interfaces")
+args = parser.parse_args()
 
-#initialize some booleans
-START=0
-STOP=0
-STOPALL=0
-RANDOM_PASSWORD=0
 
-#initialize the password length
-LENGTH=12
+def list_ips():
+    try:
+        byteStuff = subprocess.check_output(["ip addr | grep '^[0-9][0-9]*: [a-zA-Z0-9]*:' "], shell=True)
+        ip_list = byteStuff.decode('UTF-8').rstrip().split("\n")
+        return (re.sub(': .*$', "", re.sub('^[0-9]*: ', "", ip, flags=re.IGNORECASE), re.IGNORECASE)
+                for ip in ip_list)
+    except subprocess.CalledProcessError as e:
+        print ("An error occured", e.output)
+        return ()
 
-#regex to validate numerical arguments
-NRCHECK='^[0-9]+$'
 
-#a function to show the syntax of the script
-function showSyntax {
-	echo "this is a frontend for create_ap, it is used to create hotspots, flags are
-	-i [input-internet-port]
-	-o [output-internet-port]
-	-n [network-name]
-	-p [password]
-	-r [random-password-of-given-length-arg]
-	-e [name of errorfile to which output should be writen]
-	--start: to start a new hotspot
-	--stop: to stop all running instances on the input-internet-ports
-	--stop-all-running: to stop all running instances on all internet-ports
-	--list-options: to list all network interfaces availible to use
-	--list-running: to list all currently running instances in create_ap
-	--random-password: to get a random password with length given with option r, default length is $LENGTH"
-	exit $1
-}
+def list_running():
+    subprocess.call("create_ap --list-running", shell=True)
 
-#list all the optional interfaces for the device
-function list_options {
-	ip addr | grep "^[0-9][0-9]*: [a-zA-Z0-9]*:" | sed 's/^[0-9]*: \([a-zA-Z0-9]*\).*$/\1/g' | sed ':a;N;$!ba;s/\n/, /g'
-}
 
-function stop_on_instance {
-	sudo create_ap --stop $1
-}
+def randomized_password(length=12):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
 
-while getopts $optspec arg
-do
-	case $arg in #process the flags provided in $optspec
-		-)
-		case "${OPTARG}" in
-			list-options) list_options; exit ;;
-			list-running) create_ap --list-running; exit ;;
-			start) START=1 ;;
-			stop) STOP=1 ;;
-			stop-all-running) STOPALL=1 ;;
-			random-password) RANDOM_PASSWORD=1 ;;
-			\?) showSyntax 1;;
-		esac ;;
-		e) ERRORFILE=$OPTARG ;;
-		h) showSyntax 0 ;;
-		i) IN=$OPTARG ;;
-		o) OUT=$OPTARG ;;
-		n) NETWORKNAME=$OPTARG ;;
-		p) PASSWORD=$OPTARG ;;
-		r) RANDOM_PASSWORD=1
-		   if [[ $OPTARG =~ $NRCHECK ]] ; then LENGTH=$((10#$OPTARG))
-		   else
-			echo "invalid length, default value $LENGTH used instead"
-		   fi ;;
-		s) STOP=1 ;;
-		\?) showSyntax 1 ;;
-	esac
-done
 
-#stop all running instances on all input-internet-ports 
-if [ $((STOPALL)) -eq 1 ]
-then
-	to_stop=$(list_options | sed 's/, /\n/g')
-	for instance in $to_stop
-	do
-		stop_on_instance $instance
-	done
-	exit
-fi
+def start_hotspot():
+    stop_hotspot(args.input_internet_port)
+    subprocess.call("echo \"\" &>> {errorfile};"
+                    "echo \"$(date)\" &>> {errorfile};"
+                    "echo \"Your network will go from \'{input}\' to \'{output}\', it will have the name \'{networkname}\' and password \'{password}\'\";"
+                    "sudo create_ap --daemon {input} {output} {networkname} {password} &>> {errorfile};	"
+                    "echo \"All output and error will be writen to {errorfile}\";"
+                    .format(errorfile=args.errorfile, input=args.input_internet_port, output=args.output_internet_port,
+                            networkname=args.network_name, password=args.password), shell=True)
 
-#change the password to a random string if asked
-if [ $(($RANDOM_PASSWORD)) -eq 1 ]
-then
-	PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w $LENGTH | head -n 1)
-fi
 
-#if it's not indicated to either start or stop, show the syntax
-if [ $(($START)) -eq 0 ] && [ $(($STOP)) -eq 0 ]
-then
-	showSyntax 0
-fi
+def stop_hotspot(interface):
+    subprocess.call("sudo create_ap --stop {}".format(interface), shell=True)
 
-#stop any current running hotspot on the $IN port
-stop_on_instance $IN
 
-#if a hotspot needs to be started, start it using the provided or default arguments
-if [ $(($START)) -eq 1 ]
-then
-	echo "" &>> $ERRORFILE
-	echo "$(date)" &>> $ERRORFILE
-	echo "Your network will go from '$IN' to '$OUT', it will have the name '$NETWORKNAME' and password '$PASSWORD'"
-	sudo create_ap --daemon $IN $OUT $NETWORKNAME $PASSWORD &>> $ERRORFILE
-	echo "All output and error will be writen to $ERRORFILE"
-else
-	echo "Your current running networks will stop on interface: $IN"
-fi
+def stop_all():
+    for ip in list_ips():
+        stop_hotspot(ip)
 
-#if it didn't happen yet, exit the script
-exit
+
+if args.list_options:
+    print (", ".join(list_ips()))
+if args.list_running:
+    list_running()
+if args.random_password or args.random_password_length:
+    args.password = randomized_password()
+if args.start:
+    start_hotspot()
+elif args.stop:
+    stop_hotspot(args.input_internet_port)
+elif args.stop_all_running:
+    stop_all()
+
+print (args)
