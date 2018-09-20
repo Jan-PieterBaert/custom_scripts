@@ -2,13 +2,13 @@
 grub_location=/home/jan-pieter/Pictures/grub-options/grub.png
 
 case $1/$2 in
-	#mute the volume
+	#do nothing before hibernating
 	pre/*)
-	amixer set Master mute &
 	;;
 
-	#wait 2 minutes after waking up, then change the backgrounds
+	#after waking up, mute the audio and change backgrounds after waiting 2 minutes
 	post/*)
+	amixer set Master mute &
 	#change_backgrounds 120 &
 	;;
 esac
