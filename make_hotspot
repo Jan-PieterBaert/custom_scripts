@@ -14,34 +14,35 @@ default_errorfile = "/home/jan-pieter/hotspot_error_file"
 default_random_length = 12
 
 parser = argparse.ArgumentParser()
+group1 = parser.add_mutually_exclusive_group()
+group2 = parser.add_mutually_exclusive_group()
 parser.add_argument("-i", "--input-internet-port",
                     help="specifiy which internet port should be used to receive the internet",
-                    default=default_input, nargs=1)
+                    default=default_input)
 parser.add_argument("-o", "--output-internet-port",
                     help="specifiy which internet port should be used to send the internet",
-                    default=default_output, nargs=1)
+                    default=default_output)
 parser.add_argument("-n", "--network-name", help="specify what the name of the network should be",
-                    default=default_network, nargs=1)
-parser.add_argument("-p", "--password", help="specify what the password should be",
-                    default=default_password, nargs=1)
+                    default=default_network)
+group1.add_argument("-p", "--password", help="specify what the password should be",
+                    default=default_password)
 parser.add_argument("--errorfile", help="specify to which errorfile errors and output should be written",
-                    default=default_errorfile, nargs=1)
-parser.add_argument("--list-options", action="store_true",
+                    default=default_errorfile)
+group2.add_argument("--list-options", action="store_true",
                     help="list all options for the network-interfaces")
-parser.add_argument("--list-running", action="store_true",
+group2.add_argument("--list-running", action="store_true",
                     help="list all running hotspots")
-parser.add_argument("--random-password", action="store_true",
+group1.add_argument("--random-password", action="store_true",
                     help="get a random password, with given length or default {}".format(default_random_length))
 parser.add_argument("--random-password-length",
                     help="give the length",
-                    default=default_random_length, nargs=1, type=int)
-group = parser.add_mutually_exclusive_group()
-group.add_argument("--start", action="store_true",
-                   help="start the hotspot on the input-interface, first stopping all networks on that interface")
-group.add_argument("--stop", action="store_true",
-                   help="stop all networks on the input-interface")
-group.add_argument("--stop-all-running", action="store_true",
-                   help="stop all networks on all interfaces")
+                    default=default_random_length, type=int)
+group2.add_argument("--start", action="store_true",
+                    help="start the hotspot on the input-interface, first stopping all networks on that interface")
+group2.add_argument("--stop", action="store_true",
+                    help="stop all networks on the input-interface")
+group2.add_argument("--stop-all-running", action="store_true",
+                    help="stop all networks on all interfaces")
 args = parser.parse_args()
 
 
@@ -88,7 +89,7 @@ if args.list_options:
     print (", ".join(list_ips()))
 if args.list_running:
     list_running()
-if args.random_password or args.random_password_length:
+if args.random_password:
     args.password = randomized_password()
 if args.start:
     start_hotspot()
@@ -96,5 +97,3 @@ elif args.stop:
     stop_hotspot(args.input_internet_port)
 elif args.stop_all_running:
     stop_all()
-
-print (args)
