@@ -1,6 +1,6 @@
 #!/bin/bash
 i=0
-for image in $(find /home/jan-pieter/Pictures/backgrounds/ARCH_*)
+for image in $(find /home/jan-pieter/Pictures/backgrounds/background_*)
 do
 i=$((i+1))
 echo $i

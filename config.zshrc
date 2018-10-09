@@ -1,7 +1,7 @@
 export LANG=en_US.UTF-8
 export TERM="xterm-256color"
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=/home/jan-pieter/.gem/ruby/2.5.0/bin:$PATH
 
 # Path to your oh-my-zsh installation.
   export ZSH="/home/jan-pieter/.oh-my-zsh"
@@ -66,10 +66,11 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 plugins=(
   git
   python
-  docker
   web-search
   dircycle
   dirhistory
+  systemd
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -87,6 +88,7 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR='nvim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -100,15 +102,19 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconfig="nvim ~/.zshrc"
+alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias freeh="free -h"
 alias freem="free -m"
 alias cls=clear
 alias dir=ls -al
 alias vim=nvim
-alias backdown_yay="yay -S --needed $(cat /home/jan-pieter/custum_scripts/pkglist.txt)"
-alias backup_yay="yay -Q > /home/jan-pieter/custum_scripts/pkglist.txt"
+alias backdown_yay="yay -S --needed - < /home/jan-pieter/custum_scripts/pkglist.txt"
+alias backup_yay="sudo pacman -Qqen > /home/jan-pieter/custum_scripts/pkglist.txt"
+alias startbbs="sudo systemctl start bumblebeed.service"
+alias stopbbs="sudo systemctl stop bumblebeed.service"
+alias statusbbs="sudo systemctl status bumblebeed.service"
+alias restartNetwork="sudo systemctl restart NetworkManager"
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs battery)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(load ram swap status background_jobs time)
@@ -116,4 +122,6 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K_MULTILINE_FIRST_PROMT_PREFIX=''
 
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
