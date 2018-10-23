@@ -102,22 +102,37 @@ export EDITOR='nvim'
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
+
+# aliasses
+
+# editting zsh-stuff
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
+
+# general aliasses
 alias freeh="free -h"
 alias freem="free -m"
 alias cls=clear
 alias dir=ls -al
 alias vim=nvim
+#alias restartNetwork="sudo systemctl restart NetworkManager"
+alias fixWifi="sudo systemctl restart wpa_supplicant@wlp2s0"
+alias fixEth="sudo systemctl restart dhcpcd.service"
+alias gpp="git pull origin; git push origin"
+alias editWifiConf="sudo nvim /etc/wpa_supplicant/wpa_supplicant-wlp2s0.conf"
+
+# package-list backup and down
 alias backdown_yay="yay -S --needed - < /home/jan-pieter/custum_scripts/pkglist.txt"
-alias backup_yay="sudo pacman -Qqen > /home/jan-pieter/custum_scripts/pkglist.txt"
+alias backup_yay="yay -Qqe > /home/jan-pieter/custum_scripts/pkglist.txt"
+
+# bumblebee aliasses
 alias startbbs="sudo systemctl start bumblebeed.service"
 alias stopbbs="sudo systemctl stop bumblebeed.service"
 alias statusbbs="sudo systemctl status bumblebeed.service"
-alias restartNetwork="sudo systemctl restart NetworkManager"
+
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs battery)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(load ram swap status background_jobs time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs)
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K_MULTILINE_FIRST_PROMT_PREFIX=''

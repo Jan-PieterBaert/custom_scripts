@@ -1,15 +1,12 @@
 #!/bin/sh
-grub_location=/home/jan-pieter/Pictures/grub-options/grub.png
 
 case $1/$2 in
 	#do nothing before hibernating
 	pre/*)
 	;;
 
-	#after waking up, mute the audio and change backgrounds after waiting 2 minutes
 	post/*)
-	amixer set Master mute &
-	#change_backgrounds 120 &
+	xrandr --auto
 	;;
 esac
 
