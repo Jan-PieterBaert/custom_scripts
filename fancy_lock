@@ -6,4 +6,4 @@ image_path=${1:-$(random_lockscreen)}
 echo $image_path
 
 #lock the computer
-i3lock -i $image_path
+i3lock -i $image_path -efk --timecolor=880000FF --datecolor=005000FF -c 000000
