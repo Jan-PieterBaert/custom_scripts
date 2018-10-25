@@ -2,6 +2,7 @@ acpi
 alacritty
 alsa-utils
 android-studio
+arandr
 archiso
 aribb24
 autoconf
@@ -9,6 +10,7 @@ automake
 awesome-terminal-fonts
 baobab
 bash
+bat
 bbswitch
 bc
 binutils
@@ -27,7 +29,6 @@ code
 coreutils
 create_ap
 cryptsetup
-darkstat
 device-mapper
 dhcp
 dhcpcd
@@ -65,6 +66,7 @@ ghc
 ghc-static
 gimp
 git
+gitg
 glances
 glibc
 gnome-backgrounds
@@ -180,8 +182,6 @@ neofetch
 neovim
 netctl
 network-manager-applet
-networkmanager
-networkmanager-vpnc
 nmap
 nodejs
 notepadqq
@@ -232,6 +232,7 @@ rstudio-desktop-bin
 ruby
 rygel
 s-nail
+scrot
 sdl_image
 sed
 shadow
@@ -273,6 +274,7 @@ virtualbox
 virtualbox-host-modules-arch
 vlc
 vpnc
+w3m
 wget
 which
 wireshark-gtk
