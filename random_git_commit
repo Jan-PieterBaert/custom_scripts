@@ -1,0 +1,1 @@
+git commit -sS -m "$(curl http://www.whatthecommit.com/index.txt)"
