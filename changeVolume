@@ -1,0 +1,8 @@
+#!/bin/bash
+val=$(echo $1 | egrep -o "[0-9\+\-]*")
+if [ $val ] 
+then
+	pactl set-sink-volume @DEFAULT_SINK@ "$val%"
+else
+	pactl set-sink-volume @DEFAULT_SINK@ 0
+fi

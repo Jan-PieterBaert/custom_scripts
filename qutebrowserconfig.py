@@ -1,0 +1,1 @@
+/home/jan-pieter/.config/qutebrowser/config.py
