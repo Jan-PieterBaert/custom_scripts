@@ -6,7 +6,6 @@ case $1/$2 in
 	;;
 
 	post/*)
-	xrandr --auto
 	;;
 esac
 
