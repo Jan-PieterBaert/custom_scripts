@@ -83,12 +83,12 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-export EDITOR='nvim'
+if [[ -n $SSH_CONNECTION ]]; then
+   export EDITOR='vim'
+else
+   export EDITOR='nvim'
+fi
+#export EDITOR='nvim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -114,16 +114,34 @@ alias freeh="free -h"
 alias freem="free -m"
 alias cls=clear
 alias dir=ls -al
+alias vi=vim
 alias vim=nvim
+alias weather="curl 'https://wttr.in'"
+alias update_time="sudo ntpdate -s ntp.ugent.be"
+alias edit_i3_config="vim ~/.config/i3/config"
+alias bob_the_builder="make -j"
+alias serve="python3 -m http.server"
+alias fuck="sudo"
+alias playOnHoek="PULSE_SERVER=10.0.0.5 "
+
+#network aliasses
 #alias restartNetwork="sudo systemctl restart NetworkManager"
 alias fixWifi="sudo systemctl restart wpa_supplicant@wlp2s0"
 alias fixEth="sudo systemctl restart dhcpcd.service"
 alias gpp="git pull origin; git push origin"
-alias editWifiConf="sudo nvim /etc/wpa_supplicant/wpa_supplicant-wlp2s0.conf"
+alias editWifiConf="sudo nvim /etc/wpa_supplicant/wpa_supplicant-wlp2s0.conf && fixWifi"
+alias wifiStatus="wpa_cli -i wlp2s0 status"
+
+#pacman aliasses
+alias search_package="yay -Ss"
+alias fix_package="yay -S"
+alias update_packages="yay -Syu"
+alias download_updates="yay -Syuw"
 
 # package-list backup and down
 alias backdown_yay="yay -S --needed - < /home/jan-pieter/custum_scripts/pkglist.txt"
 alias backup_yay="yay -Qqe > /home/jan-pieter/custum_scripts/pkglist.txt"
+alias yay="time yay"
 
 # bumblebee aliasses
 alias startbbs="sudo systemctl start bumblebeed.service"

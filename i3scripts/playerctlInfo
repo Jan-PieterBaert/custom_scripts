@@ -5,4 +5,7 @@ if [ "$title" ]
 then
 #verkort dit nog voor zeer lange titels
 echo "${title}"
-fi
+exit
+fi 
+echo "No playerctl playing"
+exit
