@@ -1,6 +1,13 @@
 #!/bin/bash
 
 title=$(playerctl metadata title 2>/dev/null || echo "")
+artist=$(playerctl metadata artist 2>/dev/null || echo "")
+
+if [ "$artist" ]
+then
+echo -n "${artist}: "
+fi
+
 if [ "$title" ]
 then
 #verkort dit nog voor zeer lange titels
