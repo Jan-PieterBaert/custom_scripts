@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Control screen brightness in a logarithmic fashion. Linear backlight control
 # just annoys me: I want fine-grained control over low brightnesses and quickly
@@ -21,17 +21,21 @@ change_percent=125
 pgrep -u $UID -x xbacklight >/dev/null && exit
 
 # Calculate new target brightness
-current_brightness=$(xbacklight -get)
+current_brightness=$(xbacklight -get | grep -o "^.*\." | grep -o "[0-9]*")
 case $1 in
-	up)
-		target=$((current_brightness * $change_percent / 100))
-		[ $target -ne $current_brightness ] || target=$((target + 1))
+	up)	
+		target=$((current_brightness * $change_percent / 100+5))
+		echo $target
+		[ $((target)) -ne $((current_brightness)) ] || target=$((target))
+		echo $target
 		;;
 	down)
 		target=$((current_brightness * 100 / $change_percent))
 		[ $target -ne $current_brightness ] || target=$((target - 1))
 		;;
 esac
+
+echo $target
 
 # Boundaries: can't go higher than 100% or lower than 1%
 [ $target -le 1   ] && target=1
