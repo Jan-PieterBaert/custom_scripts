@@ -44,7 +44,7 @@ c.content.pdfjs = True
 
 # Height (in pixels or as percentage of the window) of the completion.
 # Type: PercOrInt
-c.completion.height = '50%'
+c.completion.height = '40%'
 
 # Minimum amount of characters needed to update completions.
 # Type: Int
@@ -84,7 +84,7 @@ c.statusbar.hide = False
 # Valid values:
 #   - top
 #   - bottom
-c.statusbar.position = 'top'
+c.statusbar.position = 'bottom'
 
 # Open new tabs (middleclick/ctrl+click) in the background.
 # Type: Bool
@@ -92,7 +92,7 @@ c.tabs.background = True
 
 # Padding (in pixels) around text for tabs.
 # Type: Padding
-c.tabs.padding = {'bottom': 5, 'left': 0, 'right': 0, 'top': 5}
+c.tabs.padding = {'bottom': 0, 'left': 0, 'right': 0, 'top': 0}
 
 # Position of the tab bar.
 # Type: Position
@@ -101,7 +101,7 @@ c.tabs.padding = {'bottom': 5, 'left': 0, 'right': 0, 'top': 5}
 #   - bottom
 #   - left
 #   - right
-c.tabs.position = 'left'
+c.tabs.position = 'top'
 
 # Format to use for the tab title. The following placeholders are
 # defined:  * `{perc}`: Percentage as a string like `[10%]`. *
