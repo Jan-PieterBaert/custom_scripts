@@ -144,7 +144,7 @@ c.url.default_page = 'https://google.com/'
 # used by prepending the search engine name to the search term, e.g.
 # `:open google qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://google.com/search?q={}'}
+c.url.searchengines = {'DEFAULT': 'https://google.com/search?q={}', 'ddg':'https://duckduckgo.com/?q={}' }
 
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl
@@ -164,11 +164,11 @@ c.colors.tabs.odd.fg = 'white'
 
 # Background color of unselected odd tabs.
 # Type: QtColor
-c.colors.tabs.odd.bg = '#008800'
+c.colors.tabs.odd.bg = '#444444'
 
 # Background color of unselected even tabs.
 # Type: QtColor
-c.colors.tabs.even.bg = '#000088'
+c.colors.tabs.even.bg = '#222222'
 
 # Background color for webpages if unset (or empty to use the theme's
 # color).
