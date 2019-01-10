@@ -6,6 +6,11 @@
 # Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
 
+# Aliases for commands. The keys of the given dictionary are the
+# aliases, while the values are the commands they map to.
+# Type: Dict
+c.aliases = {'w': 'session-save', 'q': 'quit', 'wq': 'quit --save', 'private': 'open -p'}
+
 # Require a confirmation before quitting the application.
 # Type: ConfirmQuit
 # Valid values:
@@ -124,6 +129,23 @@ c.tabs.padding = {'bottom': 0, 'left': 0, 'right': 0, 'top': 0}
 #   - right
 c.tabs.position = 'top'
 
+# When to show the tab bar.
+# Type: String
+# Valid values:
+#   - always: Always show the tab bar.
+#   - never: Always hide the tab bar.
+#   - multiple: Hide the tab bar if only one tab is open.
+#   - switching: Show the tab bar when switching tabs.
+c.tabs.show = 'multiple'
+
+# Alignment of the text inside of tabs.
+# Type: TextAlignment
+# Valid values:
+#   - left
+#   - right
+#   - center
+c.tabs.title.alignment = 'center'
+
 # Format to use for the tab title. The following placeholders are
 # defined:  * `{perc}`: Percentage as a string like `[10%]`. *
 # `{perc_raw}`: Raw percentage, e.g. `10`. * `{title}`: Title of the
@@ -161,7 +183,7 @@ c.tabs.max_width = 250
 # Page to open if :open -t/-b/-w is used without URL. Use `about:blank`
 # for a blank page.
 # Type: FuzzyUrl
-c.url.default_page = 'https://google.com/'
+c.url.default_page = 'https://wttr.in'
 
 # Search engines which can be used via the address bar. Maps a search
 # engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`
@@ -172,7 +194,23 @@ c.url.default_page = 'https://google.com/'
 # used by prepending the search engine name to the search term, e.g.
 # `:open google qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://google.com/search?q={}', 'google': 'https://google.com/search?q={}', 'ddg': 'https://duckduckgo.com/?q={}', 'weather': 'https://wttr.in/{}'}
+c.url.searchengines = {
+        'DEFAULT': 'https://google.com/search?q={}', 
+        'google': 'https://google.com/search?q={}', 
+        'ddg': 'https://duckduckgo.com/?q={}', 
+        'weather': 'https://wttr.in/{}', 'time': 
+        'https://time.is/{}', 
+        'youtube': 'https://www.youtube.com/results?search_query={}', 
+        'github': 'https://github.com/search?q={}', 
+        'maps':'https://www.google.be/maps/search/{}+', 
+        'arch': 'https://wiki.archlinux.org/?search={}', 
+        'movie': 'https://www.imdb.com/find?q={}&s=all', 
+        'osm': 'https://www.openstreetmap.org/search?query={}', 
+        'reddit': 'https://www.reddit.com/search?q={}', 
+        'word': 'https://www.wordnik.com/words/{}', 
+        'woord': 'https://woordenlijst.org/#/?q={}', 
+        'wiki':'https://en.wikipedia.org/wiki/{}'
+}
 
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl
