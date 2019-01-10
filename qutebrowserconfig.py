@@ -143,6 +143,13 @@ c.tabs.title.format = '{audio}{index}|{title}'
 # Type: PercOrInt
 c.tabs.width = 100
 
+# Minimum width (in pixels) of tabs (-1 for the default minimum size
+# behavior). This setting only applies when tabs are horizontal. This
+# setting does not apply to pinned tabs, unless `tabs.pinned.shrink` is
+# False.
+# Type: Int
+c.tabs.min_width = 100
+
 # Maximum width (in pixels) of tabs (-1 for no maximum). This setting
 # only applies when tabs are horizontal. This setting does not apply to
 # pinned tabs, unless `tabs.pinned.shrink` is False. This setting may
@@ -165,7 +172,7 @@ c.url.default_page = 'https://google.com/'
 # used by prepending the search engine name to the search term, e.g.
 # `:open google qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://google.com/search?q={}', 'ddg': 'https://duckduckgo.com/?q={}'}
+c.url.searchengines = {'DEFAULT': 'https://google.com/search?q={}', 'google': 'https://google.com/search?q={}', 'ddg': 'https://duckduckgo.com/?q={}', 'weather': 'https://wttr.in/{}'}
 
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl
