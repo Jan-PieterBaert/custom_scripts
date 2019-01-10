@@ -4,7 +4,7 @@
 #   qute://help/settings.html
 
 # Uncomment this to still load settings configured via autoconfig.yml
-config.load_autoconfig()
+# config.load_autoconfig()
 
 # Require a confirmation before quitting the application.
 # Type: ConfirmQuit
@@ -14,6 +14,18 @@ config.load_autoconfig()
 #   - downloads: Show a confirmation if downloads are running
 #   - never: Never show a confirmation.
 c.confirm_quit = ['always']
+
+# Which Chromium process model to use. Alternative process models use
+# less resources, but decrease security and robustness. See the
+# following pages for more details:    -
+# https://www.chromium.org/developers/design-documents/process-models
+# - https://doc.qt.io/qt-5/qtwebengine-features.html#process-models
+# Type: String
+# Valid values:
+#   - process-per-site-instance: Pages from separate sites are put into separate processes and separate visits to the same site are also isolated.
+#   - process-per-site: Pages from separate sites are put into separate processes. Unlike Process per Site Instance, all visits to the same site will share an OS process. The benefit of this model is reduced memory consumption, because more web pages will share processes. The drawbacks include reduced security, robustness, and responsiveness.
+#   - single-process: Run all tabs in a single process. This should be used for debugging purposes only, and it disables `:open --private`.
+c.qt.process_model = 'process-per-site-instance'
 
 # Always restore open sites when qutebrowser is reopened.
 # Type: Bool
@@ -41,6 +53,15 @@ config.set('content.javascript.enabled', True, 'qute://*/*')
 # viewer.
 # Type: Bool
 c.content.pdfjs = True
+
+# Enable plugins in Web pages.
+# Type: Bool
+c.content.plugins = True
+
+# Number of commands to save in the command history. 0: no history / -1:
+# unlimited
+# Type: Int
+c.completion.cmd_history_max_items = -1
 
 # Height (in pixels or as percentage of the window) of the completion.
 # Type: PercOrInt
@@ -144,11 +165,28 @@ c.url.default_page = 'https://google.com/'
 # used by prepending the search engine name to the search term, e.g.
 # `:open google qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://google.com/search?q={}', 'ddg':'https://duckduckgo.com/?q={}' }
+c.url.searchengines = {'DEFAULT': 'https://google.com/search?q={}', 'ddg': 'https://duckduckgo.com/?q={}'}
 
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl
 c.url.start_pages = 'https://google.com'
+
+# Background color of the completion widget for odd rows.
+# Type: QssColor
+c.colors.completion.odd.bg = '#000088'
+
+# Background color of the completion widget for even rows.
+# Type: QssColor
+c.colors.completion.even.bg = '#000022'
+
+# Color of the scrollbar in the completion view.
+# Type: QssColor
+c.colors.completion.scrollbar.bg = '#999999'
+
+# Background color for hints. Note that you can use a `rgba(...)` value
+# for transparency.
+# Type: QssColor
+c.colors.hints.bg = 'qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(55, 247, 133, 0.8), stop:1 rgba(55, 197, 66, 0.8))'
 
 # Background color for prompts.
 # Type: QssColor
@@ -157,6 +195,10 @@ c.colors.prompts.bg = '#000088'
 # Background color of the statusbar in private browsing + command mode.
 # Type: QssColor
 c.colors.statusbar.command.private.bg = '#880000'
+
+# Background color of the tab bar.
+# Type: QtColor
+c.colors.tabs.bar.bg = '#222222'
 
 # Foreground color of unselected odd tabs.
 # Type: QtColor
@@ -170,6 +212,18 @@ c.colors.tabs.odd.bg = '#444444'
 # Type: QtColor
 c.colors.tabs.even.bg = '#222222'
 
+# Background color of selected odd tabs.
+# Type: QtColor
+c.colors.tabs.selected.odd.bg = '#000088'
+
+# Foreground color of selected even tabs.
+# Type: QtColor
+c.colors.tabs.selected.even.fg = 'white'
+
+# Background color of selected even tabs.
+# Type: QtColor
+c.colors.tabs.selected.even.bg = '#000088'
+
 # Background color for webpages if unset (or empty to use the theme's
 # color).
 # Type: QtColor
@@ -177,7 +231,7 @@ c.colors.webpage.bg = '#000022'
 
 # Font used for the downloadbar.
 # Type: Font
-c.fonts.downloads = '9pt monospace'
+c.fonts.downloads = '8pt monospace'
 
 # Font used for prompts.
 # Type: Font
