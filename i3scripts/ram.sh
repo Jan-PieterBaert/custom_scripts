@@ -16,4 +16,11 @@ then
 	color="yellow"
 fi
 
+swapVal=$(/fast_files/git_repos/custum_scripts/i3scripts/swap.sh)
+
+if [ $(echo $swapVal -n | wc -l) -gt 0 ]
+then
+	echo -n "<span color='lightblue'>$swapVal</span>|" 
+fi
+
 echo "<span color='$color'>$used/$total($perc%)</span>"
