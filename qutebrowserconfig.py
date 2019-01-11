@@ -185,10 +185,14 @@ c.tabs.min_width = 100
 # Type: Int
 c.tabs.max_width = 250
 
+# Padding (in pixels) for tab indicators.
+# Type: Padding
+c.tabs.indicator.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
+
 # Page to open if :open -t/-b/-w is used without URL. Use `about:blank`
 # for a blank page.
 # Type: FuzzyUrl
-c.url.default_page = 'https://wttr.in'
+c.url.default_page = 'https://github.com/Jan-PieterBaert/personal_stuff'
 
 # Search engines which can be used via the address bar. Maps a search
 # engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`
