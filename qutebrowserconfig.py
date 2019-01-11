@@ -9,7 +9,12 @@
 # Aliases for commands. The keys of the given dictionary are the
 # aliases, while the values are the commands they map to.
 # Type: Dict
-c.aliases = {'w': 'session-save', 'q': 'quit', 'wq': 'quit --save', 'private': 'open -p'}
+c.aliases = {
+        'private': 'open -p',
+        "set": "set -t",
+        "quickmarks": "open -t qute://bookmarks/",
+        "bindings":"open -t qute://bindings/"
+        }
 
 # Require a confirmation before quitting the application.
 # Type: ConfirmQuit
@@ -198,7 +203,7 @@ c.url.searchengines = {
         'arch': 'https://wiki.archlinux.org/?search={}',  
         'DEFAULT': 'https://google.com/search?q={}', 
         'ddg': 'https://duckduckgo.com/?q={}', 
-        'facebook':'https://facebook.com/search/top/?q{}',
+        'facebook':'https://facebook.com/search/top/?q={}',
         'google': 'https://google.com/search?q={}', 
         'github': 'https://github.com/search?q={}', 
         'maps':'https://www.google.be/maps/search/{}+',
@@ -300,5 +305,42 @@ c.fonts.web.size.default = 13
 c.fonts.web.size.default_fixed = 10
 
 # Bindings for normal mode
+# Private browsers
+config.bind('eew', ':set-cmd-text :open -p {url:pretty} ')
+config.bind('ewc', ':set-cmd-text :open -p {clipboard}')
+config.bind('eww', ':set-cmd-text :open -p ')
+
+# AddToMpv bindings
 config.bind('<Ctrl+Shift+m>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{hint-url}"')
 config.bind('<Ctrl+Shift+y>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{hint-url}"')
+config.bind('<Ctrl+Shift+Alt+m>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{url}"')
+config.bind('<Ctrl+Shift+Alt+y>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{url}"')
+
+# Custom stylesheets
+config.bind(',n', 'config-cycle content.user_stylesheets /fast_files/git_repos/solarized-everything-css/css/darculized/darculized-all-sites.css /fast_files/git_repos/solarized-everything-css/css/apprentice/apprentice-all-sites.css /fast_files/git_repos/solarized-everything-css/css/gruvbox/gruvbox-all-sites.css')
+config.bind(',m', 'set content.user_stylesheets ""')
+
+
+# I don't use bookmarks, quickmarks ftw
+config.unbind('wB')
+config.unbind('gb')
+config.unbind('gB')
+config.unbind('Sb')
+config.unbind('M')
+
+# Change quickmark-save
+config.unbind('m')
+config.bind('ms', 'quickmark-save')
+
+# Read config from .py
+config.bind('mr', 'config-source')
+
+# I don't use macro's
+config.unbind('q')
+config.unbind('@')
+
+# I prefer classical tabbing
+config.unbind("<ctrl+tab>")
+config.bind("<ctrl+tab>", "tab-next")
+config.bind("<ctrl+shift+tab>", "tab-prev")
+
