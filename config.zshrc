@@ -131,6 +131,7 @@ alias playOnHoek="PULSE_SERVER=10.0.0.5 "
 alias fixWifi="sudo systemctl restart wpa_supplicant@wlp2s0"
 alias fixEth="sudo systemctl restart dhcpcd.service"
 alias gpp="git pull origin; git push origin"
+alias quteCommit="git commit -sS -m \"qute updates\" "
 alias editWifiConf="sudo nvim /etc/wpa_supplicant/wpa_supplicant-wlp2s0.conf && fixWifi"
 alias wifiStatus="wpa_cli -i wlp2s0 status"
 
