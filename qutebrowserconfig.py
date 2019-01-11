@@ -195,21 +195,22 @@ c.url.default_page = 'https://wttr.in'
 # `:open google qutebrowser`.
 # Type: Dict
 c.url.searchengines = {
+        'arch': 'https://wiki.archlinux.org/?search={}',  
         'DEFAULT': 'https://google.com/search?q={}', 
-        'google': 'https://google.com/search?q={}', 
         'ddg': 'https://duckduckgo.com/?q={}', 
-        'weather': 'https://wttr.in/{}', 'time': 
-        'https://time.is/{}', 
-        'youtube': 'https://www.youtube.com/results?search_query={}', 
+        'facebook':'https://facebook.com/search/top/?q{}',
+        'google': 'https://google.com/search?q={}', 
         'github': 'https://github.com/search?q={}', 
-        'maps':'https://www.google.be/maps/search/{}+', 
-        'arch': 'https://wiki.archlinux.org/?search={}', 
-        'movie': 'https://www.imdb.com/find?q={}&s=all', 
-        'osm': 'https://www.openstreetmap.org/search?query={}', 
+        'maps':'https://www.google.be/maps/search/{}+',
+        'movie': 'https://www.imdb.com/find?q={}&s=all',
+        'osm': 'https://www.openstreetmap.org/search?query={}',
         'reddit': 'https://www.reddit.com/search?q={}', 
         'word': 'https://www.wordnik.com/words/{}', 
+        'time': 'https://time.is/{}', 
+        'weather': 'https://wttr.in/{}',
+        'wiki':'https://en.wikipedia.org/wiki/{}',
         'woord': 'https://woordenlijst.org/#/?q={}', 
-        'wiki':'https://en.wikipedia.org/wiki/{}'
+        'youtube': 'https://www.youtube.com/results?search_query={}', 
 }
 
 # Page(s) to open at the start.
