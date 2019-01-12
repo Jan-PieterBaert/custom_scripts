@@ -145,7 +145,7 @@ c.tabs.position = 'top'
 #   - never: Always hide the tab bar.
 #   - multiple: Hide the tab bar if only one tab is open.
 #   - switching: Show the tab bar when switching tabs.
-c.tabs.show = 'always'
+c.tabs.show = 'multiple'
 
 # Duration (in milliseconds) to show the tab bar before hiding it when
 # tabs.show is set to 'switching'.
@@ -305,7 +305,9 @@ config.bind(',dd', 'set content.user_stylesheets /home/jan-pieter/.config/qutebr
 config.bind(',hb', 'history -b')
 config.bind(',m', 'set content.user_stylesheets ""')
 config.bind(',n', 'config-cycle content.user_stylesheets /fast_files/git_repos/solarized-everything-css/css/darculized/darculized-all-sites.css /fast_files/git_repos/solarized-everything-css/css/apprentice/apprentice-all-sites.css /fast_files/git_repos/solarized-everything-css/css/gruvbox/gruvbox-all-sites.css')
+config.bind(',read', 'config-source')
 config.bind(',ta', 'set tabs.show always')
+config.bind(',tm', 'set tabs.show multiple')
 config.bind(',ts', 'set tabs.show switching')
 config.bind(',vd', 'set content.user_stylesheets /home/jan-pieter/.config/qutebrowser/very_dark.css')
 config.bind(',write!!!', 'config-write-py --force')
@@ -327,7 +329,7 @@ config.bind('ewc', ':set-cmd-text :open -p {clipboard}')
 config.bind('eww', ':set-cmd-text :open -p ')
 config.bind('gB', None)
 config.bind('gb', None)
-config.bind('m', None)
+config.bind('m', 'quickmark-save')
 config.bind('mr', 'config-source')
 config.bind('ms', 'quickmark-save')
 config.bind('q', None)
