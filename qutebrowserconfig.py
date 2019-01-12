@@ -145,7 +145,12 @@ c.tabs.position = 'top'
 #   - never: Always hide the tab bar.
 #   - multiple: Hide the tab bar if only one tab is open.
 #   - switching: Show the tab bar when switching tabs.
-c.tabs.show = 'multiple'
+c.tabs.show = 'always'
+
+# Duration (in milliseconds) to show the tab bar before hiding it when
+# tabs.show is set to 'switching'.
+# Type: Int
+c.tabs.show_switching_delay = 1000
 
 # Alignment of the text inside of tabs.
 # Type: TextAlignment
@@ -269,7 +274,7 @@ c.colors.tabs.selected.even.bg = '#000088'
 # Background color for webpages if unset (or empty to use the theme's
 # color).
 # Type: QtColor
-c.colors.webpage.bg = '#000022'
+c.colors.webpage.bg = 'black'
 
 # Font used for the downloadbar.
 # Type: Font
@@ -300,7 +305,10 @@ config.bind(',dd', 'set content.user_stylesheets /home/jan-pieter/.config/qutebr
 config.bind(',hb', 'history -b')
 config.bind(',m', 'set content.user_stylesheets ""')
 config.bind(',n', 'config-cycle content.user_stylesheets /fast_files/git_repos/solarized-everything-css/css/darculized/darculized-all-sites.css /fast_files/git_repos/solarized-everything-css/css/apprentice/apprentice-all-sites.css /fast_files/git_repos/solarized-everything-css/css/gruvbox/gruvbox-all-sites.css')
+config.bind(',ta', 'set tabs.show always')
+config.bind(',ts', 'set tabs.show switching')
 config.bind(',vd', 'set content.user_stylesheets /home/jan-pieter/.config/qutebrowser/very_dark.css')
+config.bind(',write!!!', 'config-write-py --force')
 config.bind('<Ctrl+Alt+Shift+m>', 'spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{url}"')
 config.bind('<Ctrl+Alt+Shift+y>', 'spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{url}"')
 config.bind('<Ctrl+Shift+Tab>', 'tab-prev')
@@ -313,6 +321,7 @@ config.bind('@', None)
 config.bind('Ctrl+f', 'set-cmd-text /')
 config.bind('M', None)
 config.bind('Sb', None)
+config.bind('Ss', 'open -t qute://settings')
 config.bind('eew', ':set-cmd-text :open -p {url:pretty} ')
 config.bind('ewc', ':set-cmd-text :open -p {clipboard}')
 config.bind('eww', ':set-cmd-text :open -p ')
@@ -323,5 +332,5 @@ config.bind('mr', 'config-source')
 config.bind('ms', 'quickmark-save')
 config.bind('q', None)
 config.bind('wB', None)
+config.bind('write', 'config-write-py')
 config.bind('write!!!', 'config-write-py --force')
-
