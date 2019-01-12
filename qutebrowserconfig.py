@@ -9,12 +9,7 @@
 # Aliases for commands. The keys of the given dictionary are the
 # aliases, while the values are the commands they map to.
 # Type: Dict
-c.aliases = {
-        'private': 'open -p',
-        "set": "set -t",
-        "quickmarks": "open -t qute://bookmarks/",
-        "bindings":"open -t qute://bindings/"
-        }
+c.aliases = {'private': 'open -p', 'set': 'set -t', 'quickmarks': 'open -t qute://bookmarks/', 'bindings': 'open -t qute://bindings/'}
 
 # Require a confirmation before quitting the application.
 # Type: ConfirmQuit
@@ -46,6 +41,11 @@ c.auto_save.session = True
 # Type: Bool
 c.content.autoplay = False
 
+# User agent to send. Unset to send the default. Note that the value
+# read from JavaScript is always the global value.
+# Type: String
+c.content.headers.user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.128 Safari/537.36'
+
 # Enable JavaScript.
 # Type: Bool
 config.set('content.javascript.enabled', True, 'file://*')
@@ -68,6 +68,10 @@ c.content.pdfjs = True
 # Type: Bool
 c.content.plugins = True
 
+# List of user stylesheet filenames to use.
+# Type: List of File, or File
+c.content.user_stylesheets = []
+
 # Number of commands to save in the command history. 0: no history / -1:
 # unlimited
 # Type: Int
@@ -86,7 +90,7 @@ c.completion.min_chars = 1
 # Valid values:
 #   - top
 #   - bottom
-c.downloads.position = 'bottom'
+c.downloads.position = 'top'
 
 # Duration (in milliseconds) to wait before removing finished downloads.
 # If set to -1, downloads are never removed.
@@ -163,7 +167,7 @@ c.tabs.title.alignment = 'center'
 # `{protocol}`: Protocol (http/https/...) of the current web page. *
 # `{audio}`: Indicator for audio/mute status.
 # Type: FormatString
-c.tabs.title.format = '{audio}{index}|{title}'
+c.tabs.title.format = '{protocol}|{private}{audio}{index}{title_sep}{title}'
 
 # Width (in pixels or as percentage of the window) of the tab bar if
 # it's vertical.
@@ -192,7 +196,7 @@ c.tabs.indicator.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
 # Page to open if :open -t/-b/-w is used without URL. Use `about:blank`
 # for a blank page.
 # Type: FuzzyUrl
-c.url.default_page = 'https://github.com/Jan-PieterBaert/personal_stuff'
+c.url.default_page = 'https://google.com'
 
 # Search engines which can be used via the address bar. Maps a search
 # engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`
@@ -203,28 +207,11 @@ c.url.default_page = 'https://github.com/Jan-PieterBaert/personal_stuff'
 # used by prepending the search engine name to the search term, e.g.
 # `:open google qutebrowser`.
 # Type: Dict
-c.url.searchengines = {
-        'arch': 'https://wiki.archlinux.org/?search={}',  
-        'DEFAULT': 'https://google.com/search?q={}', 
-        'ddg': 'https://duckduckgo.com/?q={}', 
-        'facebook':'https://facebook.com/search/top/?q={}',
-        'google': 'https://google.com/search?q={}', 
-        'github': 'https://github.com/search?q={}', 
-        'maps':'https://www.google.be/maps/search/{}+',
-        'movie': 'https://www.imdb.com/find?q={}&s=all',
-        'osm': 'https://www.openstreetmap.org/search?query={}',
-        'reddit': 'https://www.reddit.com/search?q={}', 
-        'word': 'https://www.wordnik.com/words/{}', 
-        'time': 'https://time.is/{}', 
-        'weather': 'https://wttr.in/{}',
-        'wiki':'https://en.wikipedia.org/wiki/{}',
-        'woord': 'https://woordenlijst.org/#/?q={}', 
-        'youtube': 'https://www.youtube.com/results?search_query={}', 
-}
+c.url.searchengines = {'arch': 'https://wiki.archlinux.org/?search={}', 'DEFAULT': 'https://google.com/search?q={}', 'ddg': 'https://duckduckgo.com/?q={}', 'facebook': 'https://facebook.com/search/top/?q={}', 'google': 'https://google.com/search?q={}', 'github': 'https://github.com/search?q={}', 'maps': 'https://www.google.be/maps/search/{}+', 'movie': 'https://www.imdb.com/find?q={}&s=all', 'osm': 'https://www.openstreetmap.org/search?query={}', 'reddit': 'https://www.reddit.com/search?q={}', 'word': 'https://www.wordnik.com/words/{}', 'time': 'https://time.is/{}', 'weather': 'https://wttr.in/{}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'woord': 'https://woordenlijst.org/#/?q={}', 'youtube': 'https://www.youtube.com/results?search_query={}'}
 
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl
-c.url.start_pages = 'https://google.com'
+c.url.start_pages = 'https://github.com/Jan-PieterBaert/personal_stuff'
 
 # Background color of the completion widget for odd rows.
 # Type: QssColor
@@ -309,42 +296,32 @@ c.fonts.web.size.default = 13
 c.fonts.web.size.default_fixed = 10
 
 # Bindings for normal mode
-# Private browsers
+config.bind(',dd', 'set content.user_stylesheets /home/jan-pieter/.config/qutebrowser/very_dark.css')
+config.bind(',hb', 'history -b')
+config.bind(',m', 'set content.user_stylesheets ""')
+config.bind(',n', 'config-cycle content.user_stylesheets /fast_files/git_repos/solarized-everything-css/css/darculized/darculized-all-sites.css /fast_files/git_repos/solarized-everything-css/css/apprentice/apprentice-all-sites.css /fast_files/git_repos/solarized-everything-css/css/gruvbox/gruvbox-all-sites.css')
+config.bind(',vd', 'set content.user_stylesheets /home/jan-pieter/.config/qutebrowser/very_dark.css')
+config.bind('<Ctrl+Alt+Shift+m>', 'spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{url}"')
+config.bind('<Ctrl+Alt+Shift+y>', 'spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{url}"')
+config.bind('<Ctrl+Shift+Tab>', 'tab-prev')
+config.bind('<Ctrl+Shift+m>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{hint-url}"')
+config.bind('<Ctrl+Shift+y>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{hint-url}"')
+config.bind('<Ctrl+Tab>', 'tab-next')
+config.bind('<Ctrl+b>', None)
+config.bind('<Ctrl+f>', 'set-cmd-text /')
+config.bind('@', None)
+config.bind('Ctrl+f', 'set-cmd-text /')
+config.bind('M', None)
+config.bind('Sb', None)
 config.bind('eew', ':set-cmd-text :open -p {url:pretty} ')
 config.bind('ewc', ':set-cmd-text :open -p {clipboard}')
 config.bind('eww', ':set-cmd-text :open -p ')
-
-# AddToMpv bindings
-config.bind('<Ctrl+Shift+m>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{hint-url}"')
-config.bind('<Ctrl+Shift+y>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{hint-url}"')
-config.bind('<Ctrl+Shift+Alt+m>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{url}"')
-config.bind('<Ctrl+Shift+Alt+y>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{url}"')
-
-# Custom stylesheets
-config.bind(',n', 'config-cycle content.user_stylesheets /fast_files/git_repos/solarized-everything-css/css/darculized/darculized-all-sites.css /fast_files/git_repos/solarized-everything-css/css/apprentice/apprentice-all-sites.css /fast_files/git_repos/solarized-everything-css/css/gruvbox/gruvbox-all-sites.css')
-config.bind(',m', 'set content.user_stylesheets ""')
-
-
-# I don't use bookmarks, quickmarks ftw
-config.unbind('wB')
-config.unbind('gb')
-config.unbind('gB')
-config.unbind('Sb')
-config.unbind('M')
-
-# Change quickmark-save
-config.unbind('m')
-config.bind('ms', 'quickmark-save')
-
-# Read config from .py
+config.bind('gB', None)
+config.bind('gb', None)
+config.bind('m', None)
 config.bind('mr', 'config-source')
-
-# I don't use macro's
-config.unbind('q')
-config.unbind('@')
-
-# I prefer classical tabbing
-config.unbind("<ctrl+tab>")
-config.bind("<ctrl+tab>", "tab-next")
-config.bind("<ctrl+shift+tab>", "tab-prev")
+config.bind('ms', 'quickmark-save')
+config.bind('q', None)
+config.bind('wB', None)
+config.bind('write!!!', 'config-write-py --force')
 
