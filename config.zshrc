@@ -108,48 +108,49 @@ fi
 # aliasses
 
 # editting zsh-stuff
-alias zshconfig="nvim ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
+#alias zshconfig="nvim ~/.zshrc"
+#alias ohmyzsh="nvim ~/.oh-my-zsh"
 
 # general aliasses
-alias freeh="free -h"
-alias freem="free -m"
-alias cls=clear
-alias dir=ls -al
-alias vi=vim
-alias vim=nvim
-alias weather="curl 'https://wttr.in'"
-alias update_time="sudo ntpdate -s ntp.ugent.be"
-alias edit_i3_config="vim ~/.config/i3/config"
-alias bob_the_builder="make -j"
-alias serve="python3 -m http.server"
-alias fuck="sudo"
-alias playOnHoek="PULSE_SERVER=10.0.0.5 "
+#alias freeh="free -h"
+#alias freem="free -m"
+#alias cls=clear
+#alias dir=ls -al
+#alias vi=vim
+#alias vim=nvim
+#alias weather="curl 'https://wttr.in'"
+#alias update_time="sudo ntpdate -s ntp.ugent.be"
+#alias edit_i3_config="vim ~/.config/i3/config"
+#alias bob_the_builder="make -j"
+#alias serve="python3 -m http.server"
+#alias fuck="sudo"
+#alias playOnHoek="PULSE_SERVER=10.0.0.5 "
+#alias nano=nvim
 
 #network aliasses
 #alias restartNetwork="sudo systemctl restart NetworkManager"
-alias fixWifi="sudo systemctl restart wpa_supplicant@wlp2s0"
-alias fixEth="sudo systemctl restart dhcpcd.service"
-alias gpp="git pull origin; git push origin"
-alias quteCommit="git commit -sS -m \"qute updates\" "
-alias editWifiConf="sudo nvim /etc/wpa_supplicant/wpa_supplicant-wlp2s0.conf && fixWifi"
-alias wifiStatus="wpa_cli -i wlp2s0 status"
+#alias fixWifi="sudo systemctl restart wpa_supplicant@wlp2s0"
+#alias fixEth="sudo systemctl restart dhcpcd.service"
+#alias gpp="git pull origin; git push origin"
+#alias quteCommit="git commit -sS -m \"qute updates\" "
+#alias editWifiConf="sudo nvim /etc/wpa_supplicant/wpa_supplicant-wlp2s0.conf && fixWifi"
+#alias wifiStatus="wpa_cli -i wlp2s0 status"
 
-#pacman aliasses
-alias search_package="yay -Ss"
-alias fix_package="yay -S"
-alias update_packages="yay -Syu"
-alias download_updates="yay -Syuw"
+##pacman aliasses
+#alias search_package="yay -Ss"
+#alias fix_package="yay -S"
+#alias update_packages="yay -Syu"
+#alias download_updates="yay -Syuw"
 
-# package-list backup and down
-alias backdown_yay="yay -S --needed - < /home/jan-pieter/custum_scripts/pkglist.txt"
-alias backup_yay="yay -Qqe > /home/jan-pieter/custum_scripts/pkglist.txt"
-alias yay="time yay"
+## package-list backup and down
+#alias backdown_yay="yay -S --needed - < /home/jan-pieter/custum_scripts/pkglist.txt"
+#alias backup_yay="yay -Qqe > /home/jan-pieter/custum_scripts/pkglist.txt"
+#alias yay="time yay"
 
-# bumblebee aliasses
-alias startbbs="sudo systemctl start bumblebeed.service"
-alias stopbbs="sudo systemctl stop bumblebeed.service"
-alias statusbbs="sudo systemctl status bumblebeed.service"
+## bumblebee aliasses
+#alias startbbs="sudo systemctl start bumblebeed.service"
+#alias stopbbs="sudo systemctl stop bumblebeed.service"
+#alias statusbbs="sudo systemctl status bumblebeed.service"
 
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs battery)
@@ -161,6 +162,4 @@ POWERLEVEL9K_MULTILINE_FIRST_PROMT_PREFIX=''
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-
-# For Trackmania
-export WINEDLLOVERRIDES="OpenAl32=n"
+source $HOME/.alias
