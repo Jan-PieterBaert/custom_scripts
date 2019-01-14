@@ -307,6 +307,7 @@ config.bind(',vd', 'set content.user_stylesheets /home/jan-pieter/.config/qutebr
 config.bind(',write!!!', 'config-write-py --force')
 config.bind('<Ctrl+Alt+Shift+m>', 'spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{url}"')
 config.bind('<Ctrl+Alt+Shift+y>', 'spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{url}"')
+config.bind('<Ctrl+Alt+Shift+`>','hint links spawn --detach mpv {url}')
 config.bind('<Ctrl+Shift+Tab>', 'tab-prev')
 config.bind('<Ctrl+Shift+m>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Music "{hint-url}"')
 config.bind('<Ctrl+Shift+y>', 'hint links spawn --detach /home/jan-pieter/custum_scripts/addToMpv Video "{hint-url}"')
