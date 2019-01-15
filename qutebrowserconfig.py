@@ -181,14 +181,6 @@ c.tabs.width = 100
 # Type: Int
 c.tabs.min_width = 100
 
-# Maximum width (in pixels) of tabs (-1 for no maximum). This setting
-# only applies when tabs are horizontal. This setting does not apply to
-# pinned tabs, unless `tabs.pinned.shrink` is False. This setting may
-# not apply properly if max_width is smaller than the minimum size of
-# tab contents, or smaller than tabs.min_width.
-# Type: Int
-c.tabs.max_width = 250
-
 # Padding (in pixels) for tab indicators.
 # Type: Padding
 c.tabs.indicator.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
