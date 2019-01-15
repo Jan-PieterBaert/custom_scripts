@@ -1,7 +1,6 @@
 acestream-engine
 acestream-launcher
 acpi
-acpilight
 aic94xx-firmware
 alacritty
 alsa-utils
@@ -31,6 +30,7 @@ bzip2
 cabal-install
 calibre
 cantata
+cheese
 chromium
 clamav
 cmake
@@ -69,6 +69,7 @@ firefox
 flashplugin
 flex
 florence
+fluxgui
 galculator
 gawk
 gcc
@@ -288,6 +289,7 @@ w3m
 wd719x-firmware
 wget
 which
+wine
 wireshark-gtk
 wpa_supplicant_gui
 x265
@@ -312,7 +314,6 @@ xf86-video-voodoo
 xfce4-notifyd
 xfce4-terminal
 xfconf
-xflux-gui-git
 xfsprogs
 xmonad
 xorg-docs
@@ -327,6 +328,7 @@ xorg-server-xvfb
 xorg-sessreg
 xorg-smproxy
 xorg-x11perf
+xorg-xbacklight
 xorg-xcmsdb
 xorg-xcursorgen
 xorg-xdpyinfo
