@@ -8,7 +8,7 @@ retVal=""
 
 if [ "$artist" ]
 then
-	retVal="${artist}: "
+	retVal+="${artist}: "
 fi
 
 if [ "$title" ]
