@@ -3,7 +3,7 @@
 
 #image_path=${1:-$(random_lockscreen)}
 
-image_path=/home/jan-pieter/custum_scripts/lockscreen/background_10.png
+image_path=/fast_files/git_repos/custum_scripts/lockscreen/background_10.png
 
 echo $image_path
 
