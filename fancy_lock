@@ -1,9 +1,7 @@
 #!/bin/bash
 #get a random lockscreen image
 
-#image_path=${1:-$(random_lockscreen)}
-
-image_path=/fast_files/git_repos/custum_scripts/lockscreen/background_10.png
+image_path=${1:-/fast_files/git_repos/custum_scripts/lockscreen/background_10.png}
 
 echo $image_path
 
