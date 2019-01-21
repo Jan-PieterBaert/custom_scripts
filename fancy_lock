@@ -9,4 +9,4 @@ echo $image_path
 
 #i3lock with time and date version (i3lock-color
 #i3lock -i $image_path -efk --timecolor=FFFFFFFF --datecolor=FFFFFFFF -c 000000
-i3lock -i $image_path
+i3lock -i $image_path -u
