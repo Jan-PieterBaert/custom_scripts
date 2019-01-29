@@ -1,0 +1,150 @@
+#!/bin/env python3
+
+import argparse
+import re
+import time
+import subprocess
+from operator import attrgetter
+
+defaultFile = "/fast_files/git_repos/personal_stuff/todo.md"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--test", help="Run the doctests to see if everything is still fine", action="store_true")
+parser.add_argument("--date", help="The date of the todo")
+parser.add_argument("--priority", help="The priority of the todo (0-4)", type=int)
+parser.add_argument("--description", help="The description of the todo")
+parser.add_argument("--category", help="The category of the todo")
+args = parser.parse_args()
+
+
+class TodoItemExecption(Exception):
+    def __init__(self):
+        pass
+
+
+class TodoItem:
+    """
+    >>> TodoItem("| Din 26/2/2019 | 4 | Verjaardag | Varia |")
+    Todoitem: "| Tue 26/02/2019 | 4 | Verjaardag | Varia |"
+    >>> TodoItem("| Din 26/2/2019 | 4 | Verjaardag |")
+    Traceback (most recent call last):
+        ...
+    AssertionError
+    """
+
+    def __init__(self, line):
+        elements = list(filter(None, [element.strip() for element in line.strip().split("|")]))
+        assert len(elements) == 4
+        try:
+            self._date = time.strptime(elements[0].split(" ")[-1], "%d/%m/%Y")
+        except:
+            raise AssertionError
+        self.prio = elements[1]
+        assert 0 <= int(self.prio) <= 4
+        self.description = elements[2]
+        self.category = elements[3]
+
+    @property
+    def datestr(self):
+        return time.strftime("%a %d/%m/%Y", self._date)
+
+    @property
+    def date(self):
+        return self._date
+
+    def __repr__(self):
+        return "Todoitem: \"{}\"".format(str(self))
+
+    def __str__(self):
+        return "| {} | {} | {} | {} |".format(self.datestr, self.prio, self.description, self.category)
+
+
+def findStartEnd(fileName):
+    """
+    >>> findStartEnd("todoTestFile1")
+    (3, 42)
+    >>> findStartEnd("todoTestFile2")
+    Traceback (most recent call last):
+        ...
+    AssertionError
+    """
+    startIndex = 0
+    endIndex = 0
+    with open(fileName) as file:
+        i = 0
+        for line in file:
+            i += 1
+            if re.match("# CalendarStart", line.rstrip("\n")):
+                startIndex = i
+            if re.match("# CalendarEnd", line.rstrip("\n")):
+                endIndex = i
+
+    assert startIndex < endIndex
+
+    return startIndex + 2, endIndex - 1
+
+
+def getSortedTodos(fileName, newTodos=[]):
+    """
+    >>> getSortedTodos("todoTestFile1")
+    [Todoitem: "| Sat 02/02/2019 | 0 | Belangrijk ding | Groep1 |", Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
+    >>> getSortedTodos("todoTestFile2")
+    Traceback (most recent call last):
+        ...
+    AssertionError
+    """
+    startIndex, endIndex = findStartEnd(fileName)
+    lineFound = False
+    i = 0
+    with open(fileName) as file:
+        for line in file:
+            i += 1
+            if i < startIndex + 1 or i > endIndex:
+                continue
+
+            if lineFound and len(line.strip()):
+                newTodos.append(TodoItem(line))
+
+            if re.sub("[|: -]*", "", line):
+                lineFound = True
+    return sorted(newTodos, key=attrgetter("date", "prio"))
+
+
+def addTodo(fileName, date="", prio=4, description="", category=""):
+    """
+    >>> addTodo(defaultFile, "2/2/2019", 0, "testtest", "Varia")
+    [Todoitem: "| Sat 02/02/2019 | 0 | testtest | Varia |", Todoitem: "| Sat 02/02/2019 | 1 | KRAS startdag | KRAS |", Todoitem: "| Mon 11/02/2019 | 1 | Start semester 2 | Studies |", Todoitem: "| Mon 11/02/2019 | 3 | Cantus vermeylen fso | Varia |", Todoitem: "| Tue 12/02/2019 | 1 | Vergadering(1730) | WiNA |", Todoitem: "| Tue 12/02/2019 | 2 | Clubavond/Cocktailavond (2100) | WiNA |", Todoitem: "| Tue 12/02/2019 | 4 | Verjaardag moeder | Familie |", Todoitem: "| Wed 13/02/2019 | 2 | Speeddate dus mss shift | WiNA |", Todoitem: "| Wed 13/02/2019 | 3 | zeus codenight | zeus |", Todoitem: "| Fri 15/02/2019 | 3 | Comrades- en familiecantus | WiNA |", Todoitem: "| Tue 26/02/2019 | 4 | Verjaardag, geen zin in | Varia |", Todoitem: "| Wed 27/02/2019 | 2 | Lan der wetenschappen, mss shift | WiNA |", Todoitem: "| Thu 28/02/2019 | 3 | 12-urencantus | WiNA |", Todoitem: "| Sat 16/03/2019 | 3 | Verbroederngscantus der WINA's | WiNA |", Todoitem: "| Thu 21/03/2019 | 3 | Verbroederngscantus met Herpes | WiNA |"]
+    """
+    newTodo = TodoItem("{}|{}|{}|{}".format(date, str(prio), description, category))
+    return getSortedTodos(fileName, [newTodo])
+
+
+def editFile(fileName):
+    middle = [str(a) + "\n" for a in addTodo(fileName, args.date, args.priority, args.description, args.category)]
+    front = []
+    back = ["\n"]
+    i = 0
+    startIndex, endIndex = findStartEnd(fileName)
+    with open(fileName) as file:
+        for line in file:
+            if i <= startIndex:
+                front.append(line)
+            if i >= endIndex:
+                back.append(line)
+            i += 1
+    return front + middle + back
+
+
+if args.test:
+    import doctest
+
+    doctest.testmod()
+    exit()
+else:
+    with open("/tmp/todoAdd", 'w+') as file:
+        file.writelines(editFile(defaultFile))
+    subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
+
+# print("\n".join(
+#     str(element) for element in getSortedTodos(defaultFile, [TodoItem("02/02/2019 | 0 | Testing stuff | Varia")])))
+# # p"
