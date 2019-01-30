@@ -144,7 +144,3 @@ else:
     with open("/tmp/todoAdd", 'w+') as file:
         file.writelines(editFile(defaultFile))
     subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
-
-# print("\n".join(
-#     str(element) for element in getSortedTodos(defaultFile, [TodoItem("02/02/2019 | 0 | Testing stuff | Varia")])))
-# # p"
