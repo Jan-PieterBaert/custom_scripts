@@ -10,14 +10,17 @@ from operator import attrgetter
 defaultFile = "/fast_files/git_repos/personal_stuff/todo.md"
 
 parser = argparse.ArgumentParser()
+group1 = parser.add_mutually_exclusive_group()
+group1.add_argument("--add", help="Add a new item", action="store_true")
+group1.add_argument("--remove-first", help="Remove the first item making sure you want to remove it",
+                    action="store_true")
+group1.add_argument("--list", help="List all todos", action="store_true")
+
 parser.add_argument("--test", help="Run the doctests to see if everything is still fine", action="store_true")
 parser.add_argument("--date", help="The date of the todo")
 parser.add_argument("--priority", help="The priority of the todo (0-4)", type=int)
 parser.add_argument("--description", help="The description of the todo")
 parser.add_argument("--category", help="The category of the todo")
-parser.add_argument("--remove-first", help="Remove the first item making sure you want to remove it",
-                    action="store_true")
-parser.add_argument("--list", help="List all todos", action="store_true")
 args = parser.parse_args()
 
 
@@ -216,10 +219,16 @@ elif args.remove_first:
     with open("/tmp/todoAdd", 'w+') as file:
         file.writelines(editFileRemove(defaultFile))
     subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
+    exit()
 elif args.list:
     print("Todos: datum|prio|uitleg|categorie")
     print("\n".join([str(s) for s in getSortedTodos(defaultFile)]))
-else:
+    exit()
+elif args.add:
     with open("/tmp/todoAdd", 'w+') as file:
         file.writelines(editFileAdd(defaultFile))
     subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
+    exit()
+else:
+    parser.print_help()
+    exit()
