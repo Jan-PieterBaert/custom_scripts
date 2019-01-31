@@ -1,5 +1,6 @@
 #!/bin/env python3
 
+import sys
 import argparse
 import re
 import time
@@ -14,7 +15,43 @@ parser.add_argument("--date", help="The date of the todo")
 parser.add_argument("--priority", help="The priority of the todo (0-4)", type=int)
 parser.add_argument("--description", help="The description of the todo")
 parser.add_argument("--category", help="The category of the todo")
+parser.add_argument("--remove-first", help="Remove the first item making sure you want to remove it",
+                    action="store_true")
+parser.add_argument("--list", help="List all todos", action="store_true")
 args = parser.parse_args()
+
+
+def query_yes_no(question, default="no"):
+    """Ask a yes/no question via input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+        It must be "yes" (the default), "no" or None (meaning
+        an answer is required of the user).
+
+    The "answer" return value is True for "yes" or False for "no".
+    """
+    valid = {"yes": True, "y": True, "ye": True,
+             "no": False, "n": False}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: {}'".format())
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' "
+                             "(or 'y' or 'n').\n")
 
 
 class TodoItemExecption(Exception):
@@ -44,6 +81,12 @@ class TodoItem:
         self.description = elements[2]
         self.category = elements[3]
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash(str(self))
+
     @property
     def datestr(self):
         return time.strftime("%a %d/%m/%Y", self._date)
@@ -62,7 +105,7 @@ class TodoItem:
 def findStartEnd(fileName):
     """
     >>> findStartEnd("todoTestFile1")
-    (3, 42)
+    (4, 42)
     >>> findStartEnd("todoTestFile2")
     Traceback (most recent call last):
         ...
@@ -107,20 +150,49 @@ def getSortedTodos(fileName, newTodos=[]):
 
             if re.sub("[|: -]*", "", line):
                 lineFound = True
-    return sorted(newTodos, key=attrgetter("date", "prio"))
+    return sorted(set(newTodos), key=attrgetter("date", "prio"))
 
 
 def addTodo(fileName, date="", prio=4, description="", category=""):
     """
-    >>> addTodo(defaultFile, "2/2/2019", 0, "testtest", "Varia")
-    [Todoitem: "| Sat 02/02/2019 | 0 | testtest | Varia |", Todoitem: "| Sat 02/02/2019 | 1 | KRAS startdag | KRAS |", Todoitem: "| Mon 11/02/2019 | 1 | Start semester 2 | Studies |", Todoitem: "| Mon 11/02/2019 | 3 | Cantus vermeylen fso | Varia |", Todoitem: "| Tue 12/02/2019 | 1 | Vergadering(1730) | WiNA |", Todoitem: "| Tue 12/02/2019 | 2 | Clubavond/Cocktailavond (2100) | WiNA |", Todoitem: "| Tue 12/02/2019 | 4 | Verjaardag moeder | Familie |", Todoitem: "| Wed 13/02/2019 | 2 | Speeddate dus mss shift | WiNA |", Todoitem: "| Wed 13/02/2019 | 3 | zeus codenight | zeus |", Todoitem: "| Fri 15/02/2019 | 3 | Comrades- en familiecantus | WiNA |", Todoitem: "| Tue 26/02/2019 | 4 | Verjaardag, geen zin in | Varia |", Todoitem: "| Wed 27/02/2019 | 2 | Lan der wetenschappen, mss shift | WiNA |", Todoitem: "| Thu 28/02/2019 | 3 | 12-urencantus | WiNA |", Todoitem: "| Sat 16/03/2019 | 3 | Verbroederngscantus der WINA's | WiNA |", Todoitem: "| Thu 21/03/2019 | 3 | Verbroederngscantus met Herpes | WiNA |"]
+    >>> addTodo("todoTestFile1", "1/2/2019", 0, "testtest", "Varia")
+    [Todoitem: "| Fri 01/02/2019 | 0 | testtest | Varia |", Todoitem: "| Sat 02/02/2019 | 0 | Belangrijk ding | Groep1 |", Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
     """
     newTodo = TodoItem("{}|{}|{}|{}".format(date, str(prio), description, category))
     return getSortedTodos(fileName, [newTodo])
 
 
-def editFile(fileName):
+def removeFirstTodo(fileName):
+    """
+    >>> removeFirstTodo("todoTestFile1")
+    [Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
+    """
+    todos = getSortedTodos(fileName)
+    return todos[0], todos[1:]
+
+
+def editFileAdd(fileName):
     middle = [str(a) + "\n" for a in addTodo(fileName, args.date, args.priority, args.description, args.category)]
+    front = []
+    back = ["\n"]
+    i = 0
+    startIndex, endIndex = findStartEnd(fileName)
+    with open(fileName) as file:
+        for line in file:
+            if i <= startIndex:
+                front.append(line)
+            if i >= endIndex:
+                back.append(line)
+            i += 1
+    return front + middle + back
+
+
+def editFileRemove(fileName):
+    removedTodo, todos = removeFirstTodo(fileName)
+    removeIt = query_yes_no("Sure you want to remove {}".format(removedTodo))
+    if not removeIt:
+        todos = [removedTodo] + todos
+    middle = [str(a) + "\n" for a in todos]
     front = []
     back = ["\n"]
     i = 0
@@ -140,7 +212,14 @@ if args.test:
 
     doctest.testmod()
     exit()
+elif args.remove_first:
+    with open("/tmp/todoAdd", 'w+') as file:
+        file.writelines(editFileRemove(defaultFile))
+    subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
+elif args.list:
+    print("Todos: datum|prio|uitleg|categorie")
+    print("\n".join([str(s) for s in getSortedTodos(defaultFile)]))
 else:
     with open("/tmp/todoAdd", 'w+') as file:
-        file.writelines(editFile(defaultFile))
+        file.writelines(editFileAdd(defaultFile))
     subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
