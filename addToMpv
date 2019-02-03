@@ -1,18 +1,20 @@
 #!/bin/bash
 kind=$1
 pgrepname="MPV-$kind"
-newsong=$2
+newItem=$2
 
 if [[ ! -p $HOME/.mpvinput-$pgrepname ]]; then
     mkfifo $HOME/.mpvinput-$pgrepname
 fi
 
+touch ~/addToMpvTiming
+rm ~/addToMpvTiming
 if pgrep -f "$pgrepname" > /dev/null
 then
     notify-send "adding new item to mpv-playlist for $kind"
-    printf "%s\n" "loadfile \"${newsong}\" append-play" > $HOME/.mpvinput-$pgrepname
+    printf "%s\n" "loadfile \"${newItem}\" append-play" > $HOME/.mpvinput-$pgrepname
 else
     notify-send "starting new mpv for $kind"
-    mpv --terminal --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newsong" > ~/addToMpvOutput&
+    mpv --terminal --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newItem" 2> ~/addToMpvTiming > ~/addToMpvOutput &
 fi
 exit 0
