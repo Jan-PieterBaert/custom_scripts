@@ -1,5 +1,5 @@
 #!/bin/env python3
-
+import doctest
 import sys
 import argparse
 import re
@@ -15,6 +15,7 @@ group1.add_argument("--add", help="Add a new item", action="store_true")
 group1.add_argument("--remove-first", help="Remove the first item making sure you want to remove it",
                     action="store_true")
 group1.add_argument("--list", help="List all todos", action="store_true")
+group1.add_argument("--remove", help="remove the item at a certrain index", type=int)
 
 parser.add_argument("--test", help="Run the doctests to see if everything is still fine", action="store_true")
 parser.add_argument("--date", help="The date of the todo")
@@ -153,7 +154,7 @@ def getSortedTodos(fileName, newTodos=[]):
 
             if re.sub("[|: -]*", "", line):
                 lineFound = True
-    return sorted(set(newTodos), key=attrgetter("date", "prio"))
+    return sorted(set(newTodos), key=attrgetter("date", "prio", "description", "category"))
 
 
 def addTodo(fileName, date="", prio=4, description="", category=""):
@@ -163,15 +164,6 @@ def addTodo(fileName, date="", prio=4, description="", category=""):
     """
     newTodo = TodoItem("{}|{}|{}|{}".format(date, str(prio), description, category))
     return getSortedTodos(fileName, [newTodo])
-
-
-def removeFirstTodo(fileName):
-    """
-    >>> removeFirstTodo("todoTestFile1")
-    [Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
-    """
-    todos = getSortedTodos(fileName)
-    return todos[0], todos[1:]
 
 
 def editFileAdd(fileName):
@@ -190,9 +182,20 @@ def editFileAdd(fileName):
     return front + middle + back
 
 
-def editFileRemove(fileName):
-    removedTodo, todos = removeFirstTodo(fileName)
-    removeIt = query_yes_no("Sure you want to remove {}".format(removedTodo))
+def removeTodoIndex(fileName, index):
+    """
+    >>> removeTodoIndex("todoTestFile1", 0)
+    [Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
+    """
+    todos = getSortedTodos(fileName)
+    removedTodo = todos[index]
+    todos.remove(removedTodo)
+    return removedTodo, todos
+
+
+def editFileRemove(fileName, index):
+    removedTodo, todos = removeTodoIndex(fileName, index)
+    removeIt = query_yes_no("Sure you want to remove {}".format(removedTodo), default="no")
     if not removeIt:
         todos = [removedTodo] + todos
     middle = [str(a) + "\n" for a in todos]
@@ -210,25 +213,24 @@ def editFileRemove(fileName):
     return front + middle + back
 
 
-if args.test:
-    import doctest
+def writeToFile(lines):
+    tempFile = "/tmp/todoAdd"
+    with open(tempFile, 'w+') as file:
+        file.writelines(lines)
+    subprocess.call("mv {} {}".format(tempFile, defaultFile), shell=True)
 
+
+if args.test:
     doctest.testmod()
-    exit()
 elif args.remove_first:
-    with open("/tmp/todoAdd", 'w+') as file:
-        file.writelines(editFileRemove(defaultFile))
-    subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
-    exit()
+    writeToFile(editFileRemove(defaultFile, 0))
+elif args.remove:
+    writeToFile(editFileRemove(defaultFile, args.remove))
 elif args.list:
     print("Todos: datum|prio|uitleg|categorie")
     print("\n".join([str(s) for s in getSortedTodos(defaultFile)]))
-    exit()
 elif args.add:
-    with open("/tmp/todoAdd", 'w+') as file:
-        file.writelines(editFileAdd(defaultFile))
-    subprocess.call("mv /tmp/todoAdd {}".format(defaultFile), shell=True)
-    exit()
+    writeToFile(editFileAdd(defaultFile))
 else:
     parser.print_help()
-    exit()
+exit()
