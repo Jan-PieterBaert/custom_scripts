@@ -4,6 +4,7 @@ acpi
 aic94xx-firmware
 alacritty
 alsa-utils
+android-sdk-platform-tools
 ant
 arandr
 archiso
@@ -28,6 +29,7 @@ boost
 bumblebee
 bzip2
 cabal-install
+calc
 calibre
 cantata
 cheese
@@ -37,7 +39,6 @@ cmake
 cmatrix
 cmst
 cmus
-code
 compton
 coreutils
 create_ap
@@ -45,6 +46,7 @@ cronie
 cryptsetup
 davfs2
 debtap
+deoplete
 device-mapper
 dhcp
 dhcpcd
@@ -56,8 +58,10 @@ dtrx
 dunst
 e2fsprogs
 efibootmgr
+etcher
 evince
 exfat-utils
+factorio
 fakeroot
 feh
 ffmpeg
@@ -65,12 +69,13 @@ file
 filesystem
 filezilla
 findutils
-firefox
+firefox-nightly
 flashplugin
 flex
 florence
 fluxgui
 galculator
+garcon
 gawk
 gcc
 gcc-fortran
@@ -104,7 +109,7 @@ haveged
 hlint
 htop
 hwinfo
-i3-wm
+i3-gaps
 i3blocks
 i3lock
 i3status
@@ -123,6 +128,7 @@ jre10-openjdk
 jre8-openjdk
 less
 libattr-aarch64
+libfaketime
 libgit2
 libgit2-glib
 libgnome
@@ -205,21 +211,21 @@ pulseaudio-alsa
 pulseaudio-bluetooth
 pulseaudio-equalizer
 pulseaudio-jack
+pulsemixer
 python-pip
 qalculate-gtk
-qbittorrent
 qdirstat
 qemu
 qutebrowser
 rambox-bin
 ranger
-realvnc-vnc-viewer
 redshift
 reflector
 reiserfsprogs
 retext
+ripgrep
+ristretto
 rofi-pass
-rstudio-desktop-bin
 ruby
 rxvt-unicode-patched
 s-nail
@@ -234,7 +240,6 @@ sl
 speedtest-cli
 sshfs
 stack
-stack-client
 steam
 sudo
 sway
@@ -242,7 +247,6 @@ sysfsutils
 systemd
 systemd-sysvcompat
 tar
-teamviewer
 texinfo
 texlive-bibtexextra
 texlive-fontsextra
@@ -264,6 +268,7 @@ texlive-science
 thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
+thunar-volman
 thunderbird
 tldr
 tlp
@@ -271,6 +276,7 @@ tmux
 touchegg
 transmission-cli
 transmission-qt
+tribler
 ttf-dejavu
 ttf-freefont
 tty-clock
@@ -281,6 +287,7 @@ usbutils
 uswsusp-git
 util-linux
 vi
+vim-plug
 virtualbox
 virtualbox-host-modules-arch
 vlc
@@ -311,10 +318,18 @@ xf86-video-qxl
 xf86-video-vesa
 xf86-video-vmware
 xf86-video-voodoo
+xfce4-appfinder
 xfce4-notifyd
+xfce4-panel
+xfce4-power-manager
+xfce4-session
+xfce4-settings
 xfce4-terminal
 xfconf
+xfdesktop
 xfsprogs
+xfwm4
+xfwm4-themes
 xmonad
 xorg-docs
 xorg-fonts-100dpi
@@ -359,6 +374,7 @@ xss-lock
 xterm
 yay
 youtube-dl
+zip
 zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
