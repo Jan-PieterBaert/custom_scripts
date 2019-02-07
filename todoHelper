@@ -15,7 +15,9 @@ group1.add_argument("--add", help="Add a new item", action="store_true")
 group1.add_argument("--remove-first", help="Remove the first item making sure you want to remove it",
                     action="store_true")
 group1.add_argument("--list", help="List all todos", action="store_true")
-group1.add_argument("--remove", help="remove the item at a certrain index", type=int)
+group1.add_argument("--remove", help="Remove the item at certain indices", type=int, nargs="*")
+group1.add_argument("--remove-interactive", help="List all items and decide whether to remove or not",
+                    action="store_true")
 
 parser.add_argument("--test", help="Run the doctests to see if everything is still fine", action="store_true")
 parser.add_argument("--date", help="The date of the todo")
@@ -27,12 +29,6 @@ args = parser.parse_args()
 
 def query_yes_no(question, default="no"):
     """Ask a yes/no question via input() and return their answer.
-
-    "question" is a string that is presented to the user.
-    "default" is the presumed answer if the user just hits <Enter>.
-        It must be "yes" (the default), "no" or None (meaning
-        an answer is required of the user).
-
     The "answer" return value is True for "yes" or False for "no".
     """
     valid = {"yes": True, "y": True, "ye": True,
@@ -65,6 +61,7 @@ class TodoItemExecption(Exception):
 
 class TodoItem:
     """
+    This is a class to represent a todoItem
     >>> TodoItem("| Din 26/2/2019 | 4 | Verjaardag | Varia |")
     Todoitem: "| Tue 26/02/2019 | 4 | Verjaardag | Varia |"
     >>> TodoItem("| Din 26/2/2019 | 4 | Verjaardag |")
@@ -108,6 +105,7 @@ class TodoItem:
 
 def findStartEnd(fileName):
     """
+    Find the start and end of the todofiles.
     >>> findStartEnd("todoTestFile1")
     (4, 42)
     >>> findStartEnd("todoTestFile2")
@@ -133,6 +131,7 @@ def findStartEnd(fileName):
 
 def getSortedTodos(fileName, newTodos=[]):
     """
+    Get the todos of a certain file, sorted by date, then priority, then description and then category.
     >>> getSortedTodos("todoTestFile1")
     [Todoitem: "| Sat 02/02/2019 | 0 | Belangrijk ding | Groep1 |", Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
     >>> getSortedTodos("todoTestFile2")
@@ -159,6 +158,7 @@ def getSortedTodos(fileName, newTodos=[]):
 
 def addTodo(fileName, date="", prio=4, description="", category=""):
     """
+    Add a new todoItem to the list of todos
     >>> addTodo("todoTestFile1", "1/2/2019", 0, "testtest", "Varia")
     [Todoitem: "| Fri 01/02/2019 | 0 | testtest | Varia |", Todoitem: "| Sat 02/02/2019 | 0 | Belangrijk ding | Groep1 |", Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
     """
@@ -166,8 +166,10 @@ def addTodo(fileName, date="", prio=4, description="", category=""):
     return getSortedTodos(fileName, [newTodo])
 
 
-def editFileAdd(fileName):
-    middle = [str(a) + "\n" for a in addTodo(fileName, args.date, args.priority, args.description, args.category)]
+def fitTodosInFile(fileName, middle):
+    """
+    Fit the todos, listed as strings in middle
+    """
     front = []
     back = ["\n"]
     i = 0
@@ -179,58 +181,52 @@ def editFileAdd(fileName):
             if i >= endIndex:
                 back.append(line)
             i += 1
-    return front + middle + back
+    return front + ["{}\n".format(a) for a in middle] + back
 
 
-def removeTodoIndex(fileName, index):
+def editFileAdd(fileName):
     """
-    >>> removeTodoIndex("todoTestFile1", 0)
-    [Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
+    Edit a file with an addition of a new todoItem
+    """
+    return fitTodosInFile(fileName, addTodo(fileName, args.date, args.priority, args.description, args.category))
+
+
+def editFileRemove(fileName, indices):
+    """
+    Edit a file with a deletion of todoItems (indices listed in indices parameter
     """
     todos = getSortedTodos(fileName)
-    removedTodo = todos[index]
-    todos.remove(removedTodo)
-    return removedTodo, todos
+    indices = set(indices if indices else range(len(todos)))
+    removed = 0
+    for index in indices:
+        removedTodo = todos[index - removed]
+        if query_yes_no("Sure you want to remove {}".format(removedTodo), default="no"):
+            todos.remove(removedTodo)
+            removed += 1
+    return fitTodosInFile(fileName, todos)
 
 
-def editFileRemove(fileName, index):
-    removedTodo, todos = removeTodoIndex(fileName, index)
-    removeIt = query_yes_no("Sure you want to remove {}".format(removedTodo), default="no")
-    if not removeIt:
-        todos = [removedTodo] + todos
-    middle = [str(a) + "\n" for a in todos]
-    front = []
-    back = ["\n"]
-    i = 0
-    startIndex, endIndex = findStartEnd(fileName)
-    with open(fileName) as file:
-        for line in file:
-            if i <= startIndex:
-                front.append(line)
-            if i >= endIndex:
-                back.append(line)
-            i += 1
-    return front + middle + back
-
-
-def writeToFile(lines):
+def writeToFile(lines, fileName):
+    """
+    Write lines to a file
+    """
     tempFile = "/tmp/todoAdd"
     with open(tempFile, 'w+') as file:
         file.writelines(lines)
-    subprocess.call("mv {} {}".format(tempFile, defaultFile), shell=True)
+    subprocess.call("mv {} {}".format(tempFile, fileName), shell=True)
 
 
 if args.test:
     doctest.testmod()
 elif args.remove_first:
-    writeToFile(editFileRemove(defaultFile, 0))
-elif args.remove:
-    writeToFile(editFileRemove(defaultFile, args.remove))
+    writeToFile(editFileRemove(defaultFile, [0]), defaultFile)
+elif args.remove is not None:
+    writeToFile(editFileRemove(defaultFile, args.remove), defaultFile)
 elif args.list:
     print("Todos: datum|prio|uitleg|categorie")
     print("\n".join([str(s) for s in getSortedTodos(defaultFile)]))
 elif args.add:
-    writeToFile(editFileAdd(defaultFile))
+    writeToFile(editFileAdd(defaultFile), defaultFile)
 else:
     parser.print_help()
 exit()
