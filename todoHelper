@@ -10,6 +10,7 @@ from operator import attrgetter
 defaultFile = "/fast_files/git_repos/personal_stuff/todo.md"
 
 parser = argparse.ArgumentParser()
+
 group1 = parser.add_mutually_exclusive_group()
 group1.add_argument("--add", help="Add a new item", action="store_true")
 group1.add_argument("--remove-first", help="Remove the first item making sure you want to remove it",
@@ -35,9 +36,9 @@ def query_yes_no(question, default="no"):
              "no": False, "n": False}
     if default is None:
         prompt = " [y/n] "
-    elif default == "yes":
+    elif default.lower() == "yes":
         prompt = " [Y/n] "
-    elif default == "no":
+    elif default.lower() == "no":
         prompt = " [y/N] "
     else:
         raise ValueError("invalid default answer: {}'".format(default))
@@ -83,9 +84,15 @@ class TodoItem:
         self.category = elements[3]
 
     def __eq__(self, other):
+        """
+        Compare 2 todoItems, equality is based on hash, because that is different for item which are not the same
+        """
         return hash(self) == hash(other)
 
     def __hash__(self):
+        """
+        The hash value is the hash of the string, because the string differs for every instance which is different
+        """
         return hash(str(self))
 
     @property
