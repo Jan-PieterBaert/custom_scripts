@@ -1,6 +1,6 @@
 #!/bin/bash
 #lock the system
-fancy_lock $grub_location
+fancy_lock
 
 #hibernate the system
 systemctl hibernate
