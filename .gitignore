@@ -4,3 +4,4 @@ tabBalance
 fixTelenet
 randomDing
 .idea/*
+__pycache__/
