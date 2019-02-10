@@ -1,6 +1,6 @@
 #!/bin/env python3
 import doctest
-import sys
+import pythonFunctions
 import argparse
 import re
 import time
@@ -28,38 +28,6 @@ parser.add_argument("--category", help="The category of the todo")
 args = parser.parse_args()
 
 
-def query_yes_no(question, default="no"):
-    """Ask a yes/no question via input() and return their answer.
-    The "answer" return value is True for "yes" or False for "no".
-    """
-    valid = {"yes": True, "y": True, "ye": True,
-             "no": False, "n": False}
-    if default is None:
-        prompt = " [y/n] "
-    elif default.lower() == "yes":
-        prompt = " [Y/n] "
-    elif default.lower() == "no":
-        prompt = " [y/N] "
-    else:
-        raise ValueError("invalid default answer: {}'".format(default))
-
-    while True:
-        sys.stdout.write(question + prompt)
-        choice = input().lower()
-        if default is not None and choice == '':
-            return valid[default]
-        elif choice in valid:
-            return valid[choice]
-        else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "
-                             "(or 'y' or 'n').\n")
-
-
-class TodoItemExecption(Exception):
-    def __init__(self):
-        pass
-
-
 class TodoItem:
     """
     This is a class to represent a todoItem
@@ -74,10 +42,7 @@ class TodoItem:
     def __init__(self, line):
         elements = list(filter(None, [element.strip() for element in line.strip().split("|")]))
         assert len(elements) == 4
-        try:
-            self._date = time.strptime(elements[0].split(" ")[-1], "%d/%m/%Y")
-        except:
-            raise AssertionError
+        self._date = time.strptime(elements[0].split(" ")[-1], "%d/%m/%Y")
         self.prio = elements[1]
         assert 0 <= int(self.prio) <= 4
         self.description = elements[2]
@@ -169,7 +134,7 @@ def addTodo(fileName, date="", prio=4, description="", category=""):
     >>> addTodo("todoTestFile1", "1/2/2019", 0, "testtest", "Varia")
     [Todoitem: "| Fri 01/02/2019 | 0 | testtest | Varia |", Todoitem: "| Sat 02/02/2019 | 0 | Belangrijk ding | Groep1 |", Todoitem: "| Mon 11/02/2019 | 1 | Start studeren | Groep3 |", Todoitem: "| Mon 11/02/2019 | 2 | Vergadering fso | Groeprft32yguqw |", Todoitem: "| Mon 11/02/2019 | 3 | Start studeren | Groep10 |", Todoitem: "| Mon 11/02/2019 | 4 | Start studeren | Groep520 |"]
     """
-    newTodo = TodoItem("{}|{}|{}|{}".format(date, str(prio), description, category))
+    newTodo = TodoItem("{}|{}|{}|{}".format(date, prio, description, category))
     return getSortedTodos(fileName, [newTodo])
 
 
@@ -207,33 +172,22 @@ def editFileRemove(fileName, indices):
     removed = 0
     for index in indices:
         removedTodo = todos[index - removed]
-        if query_yes_no("Sure you want to remove {}".format(removedTodo), default="no"):
+        if pythonFunctions.query_yes_no("Sure you want to remove {}".format(removedTodo), default="no"):
             todos.remove(removedTodo)
             removed += 1
     return fitTodosInFile(fileName, todos)
 
 
-def writeToFile(lines, fileName):
-    """
-    Write lines to a file
-    """
-    tempFile = "/tmp/todoAdd"
-    with open(tempFile, 'w+') as file:
-        file.writelines(lines)
-    subprocess.call("mv {} {}".format(tempFile, fileName), shell=True)
-
-
 if args.test:
     doctest.testmod()
 elif args.remove_first:
-    writeToFile(editFileRemove(defaultFile, [0]), defaultFile)
+    pythonFunctions.writeToFile(editFileRemove(defaultFile, [0]), defaultFile)
 elif args.remove is not None:
-    writeToFile(editFileRemove(defaultFile, args.remove), defaultFile)
+    pythonFunctions.writeToFile(editFileRemove(defaultFile, args.remove), defaultFile)
 elif args.list:
     print("Todos: datum|prio|uitleg|categorie")
     print("\n".join([str(s) for s in getSortedTodos(defaultFile)]))
 elif args.add:
-    writeToFile(editFileAdd(defaultFile), defaultFile)
+    pythonFunctions.writeToFile(editFileAdd(defaultFile), defaultFile)
 else:
     parser.print_help()
-exit()

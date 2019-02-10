@@ -5,6 +5,8 @@ import re
 import string
 import subprocess
 
+import pythonFunctions
+
 default_input = "wlp2s0"
 default_output = "wlp2s0"
 default_network = "eduroam314"
@@ -53,7 +55,7 @@ def list_ips():
         return (re.sub(': .*$', "", re.sub('^[0-9]*: ', "", ip, flags=re.IGNORECASE), re.IGNORECASE)
                 for ip in ip_list)
     except subprocess.CalledProcessError as e:
-        print ("An error occured", e.output)
+        print("An error occured", e.output)
         return ()
 
 
@@ -86,11 +88,11 @@ def stop_all():
 
 
 if args.list_options:
-    print (", ".join(list_ips()))
+    print(", ".join(list_ips()))
 if args.list_running:
     list_running()
 if args.random_password:
-    args.password = randomized_password()
+    args.password = pythonFunctions.randomString(args.random_password_length)
 if args.start:
     start_hotspot()
 elif args.stop:
