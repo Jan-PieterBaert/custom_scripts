@@ -60,6 +60,12 @@ class TodoItem:
         """
         return hash(str(self))
 
+    def __repr__(self):
+        return "Todoitem: \"{}\"".format(str(self))
+
+    def __str__(self):
+        return "| {} | {} | {} | {} |".format(self.datestr, self.prio, self.description, self.category)
+
     @property
     def datestr(self):
         return time.strftime("%a %d/%m/%Y", self._date)
@@ -67,12 +73,6 @@ class TodoItem:
     @property
     def date(self):
         return self._date
-
-    def __repr__(self):
-        return "Todoitem: \"{}\"".format(str(self))
-
-    def __str__(self):
-        return "| {} | {} | {} | {} |".format(self.datestr, self.prio, self.description, self.category)
 
 
 def findStartEnd(fileName):
@@ -98,10 +98,10 @@ def findStartEnd(fileName):
 
     assert startIndex < endIndex
 
-    return startIndex + 2, endIndex - 1
+    return startIndex + 1, endIndex - 1
 
 
-def getSortedTodos(fileName, newTodos=[]):
+def getSortedTodos(fileName, newTodos=None):
     """
     Get the todos of a certain file, sorted by date, then priority, then description and then category.
     >>> getSortedTodos("todoTestFile1")
@@ -111,6 +111,7 @@ def getSortedTodos(fileName, newTodos=[]):
         ...
     AssertionError
     """
+    newTodos = newTodos if newTodos else list()
     startIndex, endIndex = findStartEnd(fileName)
     lineFound = False
     i = 0

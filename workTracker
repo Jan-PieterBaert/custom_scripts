@@ -1,0 +1,162 @@
+#!/bin/env python3
+import doctest
+import argparse
+import re
+import time
+
+import pythonFunctions
+from operator import attrgetter
+
+defaultFile = "/fast_files/git_repos/personal_stuff/todo.md"
+
+parser = argparse.ArgumentParser()
+
+group1 = parser.add_mutually_exclusive_group()
+group1.add_argument("--add", help="Add a new item", action="store_true")
+group1.add_argument("--remove-first", help="Remove the first item making sure you want to remove it",
+                    action="store_true")
+group1.add_argument("--list", help="List all todos", action="store_true")
+group1.add_argument("--remove", help="Remove the item at certain indices", type=int, nargs="*")
+group1.add_argument("--remove-interactive", help="List all items and decide whether to remove or not",
+                    action="store_true")
+
+parser.add_argument("--test", help="Run the doctests to see if everything is still fine", action="store_true")
+parser.add_argument("--date", help="The date of the workitem", default=time.strftime("%a %d/%m/%Y", time.localtime()))
+parser.add_argument("--time", help="The time spent on the workitem, in minutes", type=int)
+parser.add_argument("--description", help="The description of the workitem")
+parser.add_argument("--course", help="The category of the workitem")
+args = parser.parse_args()
+
+
+class WorkItem:
+    def __init__(self, line):
+        elements = list(filter(None, [element.strip() for element in line.strip().split("|")]))
+        assert len(elements) == 4
+        self.date = time.strptime(elements[0].split(" ")[-1], "%d/%m/%Y")
+        self.course = elements[1].lower()
+        self.description = elements[2]
+        self.time = int(elements[3])
+
+    def __eq__(self, other):
+        """
+        Compare 2 todoItems, equality is based on hash, because that is different for item which are not the same
+        """
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        """
+        The hash value is the hash of the string, because the string differs for every instance which is different
+        """
+        return hash(str(self))
+
+    def __repr__(self):
+        return "\"{}\"".format(str(self))
+
+    def __str__(self):
+        return "| {} | {} | {} | {} |".format(self.datestr, self.course, self.description, self.time)
+
+    @property
+    def datestr(self):
+        return time.strftime("%a %d/%m/%Y", self.date)
+
+
+def findStartEnd(fileName):
+    startIndex = 0
+    endIndex = 0
+    with open(fileName) as file:
+        i = 0
+        for line in file:
+            i += 1
+            if re.match("# TrackerStart", line.rstrip("\n")):
+                startIndex = i
+            if re.match("# TrackerEnd", line.rstrip("\n")):
+                endIndex = i
+
+    assert startIndex < endIndex
+
+    return startIndex, endIndex - 1
+
+
+def getSortedWorkItems(fileName, newWorkItems=None):
+    """
+    Get the workitems of a certain file, sorted by date, then course and then description.
+    """
+    newWorkItems = newWorkItems if newWorkItems is not None else list()
+    startIndex, endIndex = findStartEnd(fileName)
+    lineFound = False
+    i = 0
+    with open(fileName) as file:
+        for line in file:
+            i += 1
+            if i < startIndex + 1 or i > endIndex:
+                continue
+
+            if lineFound and len(line.strip()):
+                newWorkItems.append(WorkItem(line))
+
+            if re.sub("[|: -]*", "", line):
+                lineFound = True
+    return sorted(set(newWorkItems), key=attrgetter("date", "course", "description"))
+
+
+def addWorkItem(fileName, date, length, description, course):
+    """
+    Add a new workitem to the list of workitems
+    """
+    newTodo = WorkItem("{}|{}|{}|{}".format(date, course, description, length))
+    return getSortedWorkItems(fileName, [newTodo])
+
+
+def fitTodosInFile(fileName, middle):
+    """
+    Fit the todos, listed as strings in middle
+    """
+    front = []
+    back = ["\n"]
+    i = 0
+    startIndex, endIndex = findStartEnd(fileName)
+    with open(fileName) as file:
+        for line in file:
+            if i <= startIndex:
+                front.append(line)
+            if i >= endIndex:
+                back.append(line)
+            i += 1
+    return front + ["{}\n".format(a) for a in middle] + back
+
+
+def editFileAdd(fileName):
+    """
+    Edit a file with an addition of a new todoItem
+    """
+    return fitTodosInFile(fileName, addWorkItem(fileName, args.date, args.time, args.description, args.course))
+
+
+def editFileRemove(fileName, indices):
+    """
+    Edit a file with a deletion of todoItems (indices listed in indices parameter
+    """
+    workItems = getSortedWorkItems(fileName)
+    indices = set(indices if indices else range(len(workItems)))
+    removed = 0
+    for index in indices:
+        removedWorkItem = workItems[index - removed]
+        if pythonFunctions.query_yes_no("Sure you want to remove {}".format(removedWorkItem), default="no"):
+            workItems.remove(removedWorkItem)
+            removed += 1
+    return fitTodosInFile(fileName, workItems)
+
+
+if args.test:
+    doctest.testmod()
+elif args.remove_first:
+    pythonFunctions.writeToFile(editFileRemove(defaultFile, [0]), defaultFile)
+elif args.remove is not None:
+    pythonFunctions.writeToFile(editFileRemove(defaultFile, args.remove), defaultFile)
+elif args.list:
+    print("WorkItems: datum|vak|uitleg|aantal minuten")
+    print("\n".join([str(s) for s in getSortedWorkItems(defaultFile)]))
+elif args.add:
+    pythonFunctions.writeToFile(editFileAdd(defaultFile), defaultFile)
+else:
+    parser.print_help()
