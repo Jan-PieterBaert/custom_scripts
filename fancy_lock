@@ -1,7 +1,7 @@
 #!/bin/bash
 #get a random lockscreen image
 
-image_path=${1:-/fast_files/git_repos/custum_scripts/lockscreen/background_19.png}
+image_path=${1:-$(random_lockscreen)}
 
 echo $image_path
 
@@ -9,4 +9,4 @@ echo $image_path
 
 #i3lock with time and date version (i3lock-color
 #i3lock -i $image_path -efk --timecolor=FFFFFFFF --datecolor=FFFFFFFF -c 000000
-i3lock -i $image_path -u
+i3lock -i $image_path

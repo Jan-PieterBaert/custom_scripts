@@ -1,6 +1,6 @@
 #!/bin/bash
 #give the directory where the optional lockscreen images are saved
-dir=/home/jan-pieter/custum_scripts/lockscreen
+dir=/fast_files/git_repos/custum_scripts/lockscreen
 
 #give the name of the file
 name=background_
