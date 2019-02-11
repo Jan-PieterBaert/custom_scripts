@@ -126,7 +126,7 @@ def getSortedTodos(fileName, newTodos=None):
 
             if re.sub("[|: -]*", "", line):
                 lineFound = True
-    return sorted(set(newTodos), key=attrgetter("date", "prio", "description", "category"))
+    return sorted(set(newTodos), key=attrgetter("date", "prio", "category", "description"))
 
 
 def addTodo(fileName, date="", prio=4, description="", category=""):
