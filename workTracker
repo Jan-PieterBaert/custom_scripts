@@ -74,7 +74,7 @@ def findStartEnd(fileName):
 
     assert startIndex < endIndex
 
-    return startIndex, endIndex - 1
+    return startIndex + 1, endIndex - 1
 
 
 def getSortedWorkItems(fileName, newWorkItems=None):
