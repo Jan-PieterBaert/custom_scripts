@@ -91,9 +91,9 @@ def findStartEnd(fileName):
         i = 0
         for line in file:
             i += 1
-            if re.match("# CalendarStart", line.rstrip("\n")):
+            if re.match("<!-- CalendarStart -->", line.rstrip("\n")):
                 startIndex = i
-            if re.match("# CalendarEnd", line.rstrip("\n")):
+            if re.match("<!-- CalendarEnd -->", line.rstrip("\n")):
                 endIndex = i
 
     assert startIndex < endIndex
