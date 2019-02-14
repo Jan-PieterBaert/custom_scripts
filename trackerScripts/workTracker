@@ -4,10 +4,11 @@ import argparse
 import re
 import time
 
-import pythonFunctions
+import pythonFunctions as pythonFunctions
 from operator import attrgetter
 
 defaultFile = "/fast_files/git_repos/personal_stuff/todo.md"
+defaultName = "Tracker"
 
 parser = argparse.ArgumentParser()
 
@@ -61,42 +62,12 @@ class WorkItem:
 
 
 def findStartEnd(fileName):
-    startIndex = 0
-    endIndex = 0
-    with open(fileName) as file:
-        i = 0
-        for line in file:
-            i += 1
-            if re.match("<!-- TrackerStart -->", line.rstrip("\n")):
-                startIndex = i
-            if re.match("<!-- TrackerEnd -->", line.rstrip("\n")):
-                endIndex = i
-
-    assert startIndex < endIndex
-
-    return startIndex + 1, endIndex - 1
+    return pythonFunctions.findStartEnd(fileName, defaultName)
 
 
 def getSortedWorkItems(fileName, newWorkItems=None):
-    """
-    Get the workitems of a certain file, sorted by date, then course and then description.
-    """
-    newWorkItems = newWorkItems if newWorkItems is not None else list()
-    startIndex, endIndex = findStartEnd(fileName)
-    lineFound = False
-    i = 0
-    with open(fileName) as file:
-        for line in file:
-            i += 1
-            if i < startIndex + 1 or i > endIndex:
-                continue
-
-            if lineFound and len(line.strip()):
-                newWorkItems.append(WorkItem(line))
-
-            if re.sub("[|: -]*", "", line):
-                lineFound = True
-    return sorted(set(newWorkItems), key=attrgetter("date", "course", "description"))
+    return sorted(pythonFunctions.getItems(fileName, WorkItem, defaultName, newWorkItems),
+                  key=attrgetter("date", "course", "description"))
 
 
 def addWorkItem(fileName, date, length, description, course):
@@ -107,56 +78,20 @@ def addWorkItem(fileName, date, length, description, course):
     return getSortedWorkItems(fileName, [newTodo])
 
 
-def fitTodosInFile(fileName, middle):
-    """
-    Fit the todos, listed as strings in middle
-    """
-    front = []
-    back = ["\n"]
-    i = 0
-    startIndex, endIndex = findStartEnd(fileName)
-    with open(fileName) as file:
-        for line in file:
-            if i <= startIndex:
-                front.append(line)
-            if i >= endIndex:
-                back.append(line)
-            i += 1
-    return front + ["{}\n".format(a) for a in middle] + back
-
-
-def editFileAdd(fileName):
-    """
-    Edit a file with an addition of a new todoItem
-    """
-    return fitTodosInFile(fileName, addWorkItem(fileName, args.date, args.time, args.description, args.course))
-
-
-def editFileRemove(fileName, indices):
-    """
-    Edit a file with a deletion of todoItems (indices listed in indices parameter
-    """
-    workItems = getSortedWorkItems(fileName)
-    indices = set(indices if indices else range(len(workItems)))
-    removed = 0
-    for index in indices:
-        removedWorkItem = workItems[index - removed]
-        if pythonFunctions.query_yes_no("Sure you want to remove {}".format(removedWorkItem), default="no"):
-            workItems.remove(removedWorkItem)
-            removed += 1
-    return fitTodosInFile(fileName, workItems)
-
-
+items = getSortedWorkItems(defaultFile)
 if args.test:
     doctest.testmod()
 elif args.remove_first:
-    pythonFunctions.writeToFile(editFileRemove(defaultFile, [0]), defaultFile)
+    pythonFunctions.writeToFile(pythonFunctions.editFileRemove(defaultFile, [0], items, defaultName), defaultFile)
 elif args.remove is not None:
-    pythonFunctions.writeToFile(editFileRemove(defaultFile, args.remove), defaultFile)
+    pythonFunctions.writeToFile(pythonFunctions.editFileRemove(defaultFile, args.remove, items, defaultName),
+                                defaultFile)
 elif args.list:
     print("WorkItems: datum|vak|uitleg|aantal minuten")
-    print("\n".join([str(s) for s in getSortedWorkItems(defaultFile)]))
+    print("\n".join([str(s) for s in items]))
 elif args.add:
-    pythonFunctions.writeToFile(editFileAdd(defaultFile), defaultFile)
+    newElement = [WorkItem("{}|{}|{}|{}".format(args.date, args.course, args.description, args.time))]
+    pythonFunctions.writeToFile(
+        pythonFunctions.editFileAdd(defaultFile, getSortedWorkItems(defaultFile, newElement), defaultName), defaultFile)
 else:
     parser.print_help()
