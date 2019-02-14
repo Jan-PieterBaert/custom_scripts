@@ -5,7 +5,7 @@ import re
 import string
 import subprocess
 
-import pythonFunctions
+from trackerScripts import pythonFunctions
 
 default_input = "wlp2s0"
 default_output = "wlp2s0"
