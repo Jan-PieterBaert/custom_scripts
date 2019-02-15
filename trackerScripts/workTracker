@@ -20,6 +20,7 @@ group1.add_argument("--list", help="List all todos", action="store_true")
 group1.add_argument("--remove", help="Remove the item at certain indices", type=int, nargs="*")
 group1.add_argument("--remove-interactive", help="List all items and decide whether to remove or not",
                     action="store_true")
+group1.add_argument("--week-total", help="List week totals", action="store_true")
 
 parser.add_argument("--test", help="Run the doctests to see if everything is still fine", action="store_true")
 parser.add_argument("--date", help="The date of the workitem", default=time.strftime("%a %d/%m/%Y", time.localtime()))
@@ -60,6 +61,12 @@ class WorkItem:
     def datestr(self):
         return time.strftime("%a %d/%m/%Y", self.date)
 
+    def getCourse(self):
+        return self.course
+
+    def getLength(self):
+        return self.time
+
 
 def findStartEnd(fileName):
     return pythonFunctions.findStartEnd(fileName, defaultName)
@@ -78,6 +85,35 @@ def addWorkItem(fileName, date, length, description, course):
     return getSortedWorkItems(fileName, [newTodo])
 
 
+def getWeekTotal(fileName):
+    def weekNumber(item):
+        return time.strftime("%Y%W", time.strptime(item.datestr, "%a %d/%m/%Y"))
+
+    def weekNumberToMonday(item):
+        return time.strftime("%d/%m/%Y", time.strptime(str(item) + "-1", "%Y%W-%w"))
+
+    lines = []
+    items = getSortedWorkItems(fileName)
+    dictio = dict()
+    for item in items:
+        number = weekNumber(item)
+        dictio[number] = dictio.get(number, list()) + [item]
+
+    courses = {item.getCourse() for item in items}
+    firstLine = "| week |"
+    for key in sorted(courses):
+        firstLine += " {} |".format(key)
+    firstLine += " total |"
+    lines.append(firstLine)
+
+    for key in dictio.keys():
+        l = [sum(i.getLength() * int(i.getCourse() == j) for i in dictio[key]) for j in courses]
+        lines.append("| {} |".format(weekNumberToMonday(key)) +
+                     " | ".join(str(i) for i in l) +
+                     "| {} |".format(sum(l)))
+    return lines
+
+
 items = getSortedWorkItems(defaultFile)
 if args.test:
     doctest.testmod()
@@ -93,5 +129,7 @@ elif args.add:
     newElement = [WorkItem("{}|{}|{}|{}".format(args.date, args.course, args.description, args.time))]
     pythonFunctions.writeToFile(
         pythonFunctions.editFileAdd(defaultFile, getSortedWorkItems(defaultFile, newElement), defaultName), defaultFile)
+elif args.week_total:
+    print("\n".join(getWeekTotal(defaultFile)))
 else:
     parser.print_help()
