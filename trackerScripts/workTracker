@@ -99,14 +99,14 @@ def getWeekTotal(fileName):
         number = weekNumber(item)
         dictio[number] = dictio.get(number, list()) + [item]
 
-    courses = {item.getCourse() for item in items}
+    courses = sorted({item.getCourse() for item in items})
     firstLine = "| week |"
-    for key in sorted(courses):
+    for key in courses:
         firstLine += " {} |".format(key)
     firstLine += " total |"
     lines.append(firstLine)
 
-    for key in dictio.keys():
+    for key in sorted(dictio.keys()):
         l = [sum(i.getLength() * int(i.getCourse() == j) for i in dictio[key]) for j in courses]
         lines.append("| {} |".format(weekNumberToMonday(key)) +
                      " | ".join(str(i) for i in l) +
