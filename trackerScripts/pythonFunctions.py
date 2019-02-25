@@ -63,7 +63,7 @@ def findStartEnd(fileName, name):
 
     assert startIndex < endIndex
 
-    return startIndex + 1, endIndex - 1
+    return startIndex + 2, endIndex - 1
 
 
 def getItems(fileName, className, kind, newWorkItems=None):
