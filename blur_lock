@@ -1,8 +1,11 @@
 #!/bin/bash
 
-img="/tmp/lock-screen.png"
+#img="/tmp/lock-screen.png"
+#
+#escrotum "$img"
+#convert "$img" -blur 0x5 "$img"
+#i3lock -bt -i "$img"
 
-escrotum "$img"
-convert "$img" -blur 0x5 "$img"
-i3lock -i "$img"
 
+#i3lock-fancy  -t "$(curl http://www.whatthecommit.com/index.txt)"
+i3lock-fancy
