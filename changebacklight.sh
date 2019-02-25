@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/ksh
 
 # Control screen brightness in a logarithmic fashion. Linear backlight control
 # just annoys me: I want fine-grained control over low brightnesses and quickly
@@ -29,7 +29,7 @@ case $1 in
 		;;
 	down)
 		target=$((current_brightness * 100.0 / $change_percent))
-		[ $target -ne $current_brightness ] || target=$((target - 1.0))
+    [ $((target)) -ne $((current_brightness)) ] || target=$((target - 1.0))
 		;;
 esac
 
@@ -37,8 +37,11 @@ esac
 #[ $target -le 1   ] && target=1
 #[ $target -ge 100 ] && target=100
 
-if [ $target -gt 100.0 ]; then target=100.0; fi
+#if [ $((target)) -gt 100.0 ]; then target=100.0; fi
+#if [ $((target)) -lt 0.0 ]; then target=0.0; fi
+
+echo $target
 
 # Smoothly set the new brightness
-light -S $target
+light -S "$target"
 
