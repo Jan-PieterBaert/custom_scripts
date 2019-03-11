@@ -7,7 +7,7 @@ import time
 import pythonFunctions as pythonFunctions
 from operator import attrgetter
 
-defaultFile = "/fast_files/git_repos/personal_stuff/todo.md"
+defaultFile = "/fast_files/git_repos/Personal-random-stuff/todo.md"
 defaultName = "Tracker"
 
 parser = argparse.ArgumentParser()
@@ -112,6 +112,33 @@ def getWeekTotal(fileName):
     return lines
 
 
+def getCourseTotal(fileName):
+    def course(item):
+        return item.getCourse()
+
+    lines = []
+    items = getSortedWorkItems(fileName)
+    dictio = dict()
+    for item in items:
+        number = course(item)
+        dictio[number] = dictio.get(number, list()) + [item]
+
+    courses = sorted({item.getCourse() for item in items})
+    firstLine = "| "
+    for key in courses:
+        firstLine += " {} | ".format(key)
+    firstLine += " total |"
+    lines.append(firstLine)
+
+    lastLine = ""
+    print(dictio.keys())
+    for key in sorted(dictio.keys()):
+        l = [sum(i.getLength() * int(i.getCourse() == j) for i in dictio[key]) for j in courses]
+        lastLine += "| {} | {} |".format(" | ".join(str(i) for i in l), sum(l))
+    lines.append(lastLine)
+    return lines
+
+
 items = getSortedWorkItems(defaultFile)
 if args.test:
     doctest.testmod()
@@ -129,5 +156,6 @@ elif args.add:
         pythonFunctions.editFileAdd(defaultFile, getSortedWorkItems(defaultFile, newElement), defaultName), defaultFile)
 elif args.week_total:
     print("\n".join(getWeekTotal(defaultFile)))
+    #print("\n".join(getCourseTotal(defaultFile)))
 else:
     parser.print_help()

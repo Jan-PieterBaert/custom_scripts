@@ -6,7 +6,7 @@ import re
 import time
 from operator import attrgetter
 
-defaultFile = "/fast_files/git_repos/personal_stuff/todo.md"
+defaultFile = "/fast_files/git_repos/Personal-random-stuff/todo.md"
 defaultName = "Calendar"
 
 parser = argparse.ArgumentParser()
