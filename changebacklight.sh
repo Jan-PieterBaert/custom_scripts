@@ -40,7 +40,7 @@ esac
 #if [ $((target)) -gt 100.0 ]; then target=100.0; fi
 #if [ $((target)) -lt 0.0 ]; then target=0.0; fi
 
-echo $target
+#echo $target
 
 # Smoothly set the new brightness
 light -S "$target"
