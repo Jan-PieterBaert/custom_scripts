@@ -5,3 +5,4 @@ fixTelenet
 randomDing
 .idea/*
 __pycache__/
+**venv/**
