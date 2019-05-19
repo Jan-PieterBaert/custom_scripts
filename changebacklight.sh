@@ -15,7 +15,7 @@
 
 
 # Multiply the current brightness by this percentage. This has to be an integer
-change_percent=125.0
+change_percent=120.0
 
 # Don't start a new transition if the previous one isn't done yet
 #pgrep -u $UID -x xbacklight >/dev/null && exit
