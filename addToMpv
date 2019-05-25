@@ -11,11 +11,11 @@ touch ~/addToMpvTiming
 rm ~/addToMpvTiming
 if pgrep -f "$pgrepname" > /dev/null
 then
+    printf "%s\n" "loadfile \"${newItem}\" append-play" > $HOME/.mpvinput-$pgrepname
     notify-send "adding ${newItem} 
 to mpv-playlist for $kind" -u low -a "MPV-PLAYER"
-    printf "%s\n" "loadfile \"${newItem}\" append-play" > $HOME/.mpvinput-$pgrepname
 else
+    alacritty -e mpv --terminal --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newItem"
     notify-send "starting new mpv for $kind" -u normal -a "MPV-PLAYER"  
-    mpv --terminal --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newItem" 2> ~/addToMpvTiming > ~/addToMpvOutput &
 fi
 exit 0

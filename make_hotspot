@@ -12,6 +12,8 @@ default_password = "12345679"
 random_password = False
 default_errorfile = "/home/jan-pieter/hotspot_error_file"
 default_random_length = 12
+default_subnet = "10.20.30.1"
+default_method = "nat"
 
 parser = argparse.ArgumentParser()
 group1 = parser.add_mutually_exclusive_group()
@@ -37,6 +39,8 @@ group1.add_argument("--random-password", action="store_true",
 parser.add_argument("--random-password-length",
                     help="give the length",
                     default=default_random_length, type=int)
+parser.add_argument("--subnet", help="the ip of the gateway, format: x.y.z.1/24", default=default_subnet)
+parser.add_argument("--method", help="the method, 'nat' (default), 'bridge' or 'none'", default=default_method)
 group2.add_argument("--start", action="store_true",
                     help="start the hotspot on the input-interface, first stopping all networks on that interface")
 group2.add_argument("--stop", action="store_true",
@@ -70,10 +74,10 @@ def start_hotspot():
     subprocess.call("echo \"\" &>> {errorfile};"
                     "echo \"$(date)\" &>> {errorfile};"
                     "echo \"Your network will go from \'{input}\' to \'{output}\', it will have the name \'{networkname}\' and password \'{password}\'\";"
-                    "sudo create_ap --daemon {input} {output} {networkname} {password} &>> {errorfile};	"
+                    "sudo create_ap --daemon {input} {output} {networkname} {password} -g {subnet} -m {method} &>> {errorfile};	"
                     "echo \"All output and error will be writen to {errorfile}\";"
                     .format(errorfile=args.errorfile, input=args.input_internet_port, output=args.output_internet_port,
-                            networkname=args.network_name, password=args.password), shell=True)
+                            networkname=args.network_name, password=args.password, subnet=args.subnet, method=args.method), shell=True)
 
 
 def stop_hotspot(interface):
