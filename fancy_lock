@@ -1,12 +1,12 @@
 #!/bin/bash
 #get a random lockscreen image
 
-image_path=${1:-$(random_lockscreen)}
+image_path=${1:-"/home/jan-pieter/git_repos/custum_scripts/lockscreen/background_21.png"}
 
 echo $image_path
 
 #lock the computer
 
 #i3lock with time and date version (i3lock-color
-#i3lock -i $image_path -efk --timecolor=FFFFFFFF --datecolor=FFFFFFFF -c 000000
-i3lock -i $image_path
+#i3lock -i $image_path
+betterlockscreen -l

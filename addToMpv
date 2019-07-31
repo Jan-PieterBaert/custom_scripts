@@ -2,6 +2,7 @@
 kind=$1
 pgrepname="MPV-$kind"
 newItem=$2
+TERMINAL=st
 
 if [[ ! -p $HOME/.mpvinput-$pgrepname ]]; then
     mkfifo $HOME/.mpvinput-$pgrepname
@@ -15,7 +16,7 @@ then
     notify-send "adding ${newItem} 
 to mpv-playlist for $kind" -u low -a "MPV-PLAYER"
 else
-    alacritty -e mpv --terminal --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newItem"
+    $TERMINAL -e mpv --terminal --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newItem" &
     notify-send "starting new mpv for $kind" -u normal -a "MPV-PLAYER"  
 fi
 exit 0
