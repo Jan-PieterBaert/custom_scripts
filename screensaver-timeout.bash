@@ -1,12 +1,12 @@
 #!/bin/bash
-"""
+: '
 A small program to have a few different screensaver timeout modes
 TODO: add a modes|timeouts file
-"""
+'
 
 file=$HOME/.presenter-mode
 modes=("Default mode" "Code mode" "Presenter mode")
-timeouts=("60 0" "300 0" "0 0")
+timeouts=("30" "300" "0")
 length=${#modes[@]}
 
 if  [ ! -f $file ] || [ -z "$(cat ${file})" ]
@@ -34,8 +34,8 @@ then
 fi
 
 
-
-xset s $timeouts[index]
+xset s ${timeouts[${index}]}
+xset dpms 0 0 ${timeouts[${index}]}
 
 rm $file
 touch $file
