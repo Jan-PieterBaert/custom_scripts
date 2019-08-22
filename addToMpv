@@ -2,21 +2,23 @@
 kind=$1
 pgrepname="MPV-$kind"
 newItem=$2
-TERMINAL=st
+TERMINAL=alacritty
+
+touch .mpvinput-$pgrepname.bak
 
 if [[ ! -p $HOME/.mpvinput-$pgrepname ]]; then
     mkfifo $HOME/.mpvinput-$pgrepname
 fi
 
-touch ~/addToMpvTiming
-rm ~/addToMpvTiming
 if pgrep -f "$pgrepname" > /dev/null
 then
     printf "%s\n" "loadfile \"${newItem}\" append-play" > $HOME/.mpvinput-$pgrepname
-    notify-send "adding ${newItem} 
+	# Also write to backup file in case something goes wrong
+	printf "%s\n" "loadfile \"${newItem}\" append-play" >> $HOME/.mpvinput-$pgrepname.bak
+    notify-send "adding ${newItem}
 to mpv-playlist for $kind" -u low -a "MPV-PLAYER"
 else
     $TERMINAL -e mpv --terminal --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newItem" &
-    notify-send "starting new mpv for $kind" -u normal -a "MPV-PLAYER"  
+    notify-send "starting new mpv for $kind" -u normal -a "MPV-PLAYER"
 fi
 exit 0
