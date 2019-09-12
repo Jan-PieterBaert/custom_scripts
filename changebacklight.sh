@@ -37,11 +37,12 @@ esac
 #[ $target -le 1   ] && target=1
 #[ $target -ge 100 ] && target=100
 
-#if [ $((target)) -gt 100.0 ]; then target=100.0; fi
-#if [ $((target)) -lt 0.0 ]; then target=0.0; fi
+if [ $((target)) -gt 100.0 ]; then target=100.0; fi
+if [ $((target)) -lt 1.0 ]; then target=1.0; fi
 
 #echo $target
 
 # Smoothly set the new brightness
-light -S "$target"
+xbacklight -set "$target"
+# light -S "$target"
 
