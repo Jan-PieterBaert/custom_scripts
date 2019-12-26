@@ -94,7 +94,7 @@ if args.list_options:
 if args.list_running:
     list_running()
 if args.random_password:
-    args.password = pythonFunctions.randomString(args.random_password_length)
+    args.password = randomized_password(args.random_password_length)
 if args.start:
     start_hotspot()
 elif args.stop:

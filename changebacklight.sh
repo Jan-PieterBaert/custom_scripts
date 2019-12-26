@@ -43,6 +43,6 @@ if [ $((target)) -lt 1.0 ]; then target=1.0; fi
 #echo $target
 
 # Smoothly set the new brightness
-xbacklight -set "$target"
-# light -S "$target"
+# xbacklight -set "$target"
+light -S "$target"
 
