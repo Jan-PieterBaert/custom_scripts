@@ -2,7 +2,7 @@
 kind=$1
 pgrepname="MPV-$kind"
 newItem=$2
-TERMINAL=alacritty
+TERMINAL=st
 
 touch .mpvinput-$pgrepname.bak
 
