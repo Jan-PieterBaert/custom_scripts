@@ -1,7 +1,7 @@
 #!/bin/bash
 # Give the date
 counter_location="/home/jan-pieter/date_script_counter"
-date +"%d/%m/%y" | tr -d '\n'
+date +"%d/%m/%Y" | tr -d '\n'
 
 # increase the counter
 touch $counter_location
