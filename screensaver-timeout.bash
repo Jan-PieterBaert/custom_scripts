@@ -5,8 +5,8 @@ TODO: add a modes|timeouts file
 '
 
 file=$HOME/.presenter-mode
-modes=("Default mode" "Code mode" "Presenter mode")
-timeouts=("30" "300" "0")
+modes=("Default mode" "Study mode" "Code mode" "Presenter mode")
+timeouts=("60" "600" "300" "0")
 length=${#modes[@]}
 
 if  [ ! -f $file ] || [ -z "$(cat ${file})" ]
