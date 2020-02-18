@@ -3,23 +3,33 @@ kind=$1
 pgrepname="MPV-$kind"
 newItem=$2
 TERMINAL=st
+location=$HOME/.mpvinput-$pgrepname
+soc_location=/tmp/mpvsock-$pgrepname
+mpv=mpv
 
 touch .mpvinput-$pgrepname.bak
 
-if [[ ! -p $HOME/.mpvinput-$pgrepname ]]; then
-    mkfifo $HOME/.mpvinput-$pgrepname
+# if [[ ! -p $HOME/.mpvinput-$pgrepname ]]; then
+#     mkfifo $location
+# fi
+
+if [[ -e /tmp/optirun ]]; then
+    mpv="optirun mpv"
 fi
 
 # Also write to backup file in case something goes wrong
-printf "%s\n" "loadfile \"${newItem}\" append-play" >> $HOME/.mpvinput-$pgrepname.bak
+printf "%s\n" "loadfile \"${newItem}\" append-play" >> $location.bak
 
 if pgrep -f "$pgrepname" > /dev/null
 then
-    printf "%s\n" "loadfile \"${newItem}\" append-play" > $HOME/.mpvinput-$pgrepname
+    printf "%s\n" "loadfile \"${newItem}\" append-play" | socat - $soc_location
+
+    # printf "%s\n" "loadfile \"${newItem}\" append-play" > $location
+
     notify-send "adding ${newItem}
 to mpv-playlist for $kind" -u low -a "MPV-PLAYER"
 else
-    $TERMINAL -e mpv --terminal --keep-open=yes --x11-name=$pgrepname --input-file=$HOME/.mpvinput-$pgrepname --player-operation-mode=pseudo-gui "$newItem" &
+    $TERMINAL -e $mpv --terminal --keep-open=yes --x11-name=$pgrepname --input-ipc-server=$soc_location --player-operation-mode=pseudo-gui "$newItem" &
     notify-send "starting new mpv for $kind" -u normal -a "MPV-PLAYER"
 fi
 exit 0
