@@ -2,7 +2,7 @@
 kind=$1
 pgrepname="MPV-$kind"
 newItem=$2
-TERMINAL=st
+TERMINAL=/usr/bin/st
 location=$HOME/.mpvinput-$pgrepname
 soc_location=/tmp/mpvsock-$pgrepname
 mpv=mpv
@@ -29,7 +29,7 @@ then
     notify-send "adding ${newItem}
 to mpv-playlist for $kind" -u low -a "MPV-PLAYER"
 else
-    $TERMINAL -e $mpv --terminal --keep-open=yes --x11-name=$pgrepname --input-ipc-server=$soc_location --player-operation-mode=pseudo-gui "$newItem" &
+    $TERMINAL -e $mpv --terminal --keep-open=yes --x11-name=$pgrepname --input-ipc-server=$soc_location --player-operation-mode=pseudo-gui "$newItem" --idle=yes &
     notify-send "starting new mpv for $kind" -u normal -a "MPV-PLAYER"
 fi
 exit 0

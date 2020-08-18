@@ -9,4 +9,7 @@ echo $image_path
 
 #i3lock with time and date version (i3lock-color
 #i3lock -i $image_path
+export BLOCK_BUTTON=4
+/home/jan-pieter/.config/i3/i3scripts/system_keyboard_state.sh
+
 betterlockscreen -l

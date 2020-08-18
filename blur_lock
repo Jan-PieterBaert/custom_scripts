@@ -8,4 +8,7 @@
 
 
 #i3lock-fancy  -t "$(curl http://www.whatthecommit.com/index.txt)"
+export BLOCK_BUTTON=4
+/home/jan-pieter/.config/i3/i3scripts/system_keyboard_state.sh
+
 i3lock-fancy
