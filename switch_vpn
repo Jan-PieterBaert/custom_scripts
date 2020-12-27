@@ -1,0 +1,10 @@
+#!/bin/bash
+local_iface=wg_local
+global_iface=wg_global
+range=$(ifconfig $local_iface &>/dev/null || echo 'local')
+if [ "$range" == "local" ]
+then
+    wg-quick down $global_iface && wg-quick up $local_iface
+else
+    wg-quick down $local_iface && wg-quick up $global_iface
+fi
