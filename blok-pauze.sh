@@ -4,7 +4,7 @@ sleep $TIMEOUT
 mpv /home/jan-pieter/git_repos/custum_scripts/alarm.mp3 --loop-file --no-resume-playback
 
 
-counter_location="/home/jan-pieter/blok_pauze_counter"
+counter_location="/home/jan-pieter/.blok_pauze_counter"
 
 # increase the counter
 touch $counter_location

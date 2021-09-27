@@ -2,6 +2,7 @@
 kind=$1
 pgrepname="MPV-$kind"
 newItem=$2
+# TERMINAL=alacritty
 TERMINAL=/usr/bin/st
 location=$HOME/.mpvinput-$pgrepname
 soc_location=/tmp/mpvsock-$pgrepname

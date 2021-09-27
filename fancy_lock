@@ -5,6 +5,9 @@ image_path=${1:-"/home/jan-pieter/git_repos/custum_scripts/lockscreen/background
 
 echo $image_path
 
+# update the lockscreen path
+#betterlockscreen -u $image_path
+
 #lock the computer
 
 #i3lock with time and date version (i3lock-color
