@@ -4,5 +4,5 @@ for image in $(find /home/jan-pieter/Pictures/backgrounds/background_* | sort)
 do
 i=$((i+1))
 echo $i
-convert $image -resize 1920x1080 /home/jan-pieter/git_repos/custum_scripts/lockscreen/background_$i.png &
+convert $image -resize 2560x1440 /home/jan-pieter/git_repos/custum_scripts/lockscreen/background_$i.png &
 done

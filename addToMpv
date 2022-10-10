@@ -2,8 +2,8 @@
 kind=$1
 pgrepname="MPV-$kind"
 newItem=$2
-# TERMINAL=alacritty
-TERMINAL=/usr/bin/st
+TERMINAL=alacritty
+# TERMINAL=/usr/bin/st
 location=$HOME/.mpvinput-$pgrepname
 soc_location=/tmp/mpvsock-$pgrepname
 mpv=mpv
@@ -14,18 +14,12 @@ touch .mpvinput-$pgrepname.bak
 #     mkfifo $location
 # fi
 
-if [[ -e /tmp/optirun ]]; then
-    mpv="optirun mpv"
-fi
-
 # Also write to backup file in case something goes wrong
 printf "%s\n" "loadfile \"${newItem}\" append-play" >> $location.bak
 
 if pgrep -f "$pgrepname" > /dev/null
 then
     printf "%s\n" "loadfile \"${newItem}\" append-play" | socat - $soc_location
-
-    # printf "%s\n" "loadfile \"${newItem}\" append-play" > $location
 
     notify-send "adding ${newItem}
 to mpv-playlist for $kind" -u low -a "MPV-PLAYER"
