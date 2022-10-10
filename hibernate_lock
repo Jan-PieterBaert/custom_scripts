@@ -1,6 +1,0 @@
-#!/bin/bash
-#lock the system
-fancy_lock &
-
-#hibernate the system
-systemctl hibernate
