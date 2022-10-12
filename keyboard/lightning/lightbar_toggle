@@ -8,6 +8,9 @@ fi
 
 PWCMD=$(asusctl --help | grep "led-pow[^ ]*" -o)
 
+if test PWCMD == "led-pow-2"; then
+	exit 0
+fi
 
 if test $1 == on; then
 	asusctl ${PWCMD} -l true
