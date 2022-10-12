@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+option=$1
+
+shift 
+
+declare -A commands
+
+commands[screen]="screen_brightness_mode"
+commands[bar]="lightbar_toggle"
+commands[keyboard]="keyboard_intensity"
+
+if test $# -eq 0; then
+	for val in ${commands[@]}; do
+		$val $option
+	done
+	exit 0
+fi
+
+for val in $@; do
+	${commands[$val]} $option
+done
+
