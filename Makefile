@@ -31,7 +31,7 @@ keyboard-scripts:
 	@echo "Installing keyboard scripts"
 	cp keyboard/keyboard_toggle ${TARGET}
 	cp keyboard/lightning/lightbar_toggle ${TARGET}
-	cp keyboard/lightning/intensity ${TARGET}
+	cp keyboard/lightning/keyboard_intensity ${TARGET}
 
 date-scripts:
 	@echo "Installing date scripts"
