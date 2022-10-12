@@ -1,5 +1,5 @@
 #!/bin/bash
-val=$(echo $1 | egrep -o "[0-9\+\-]*")
+val=$(echo $1 | grep -Eo "[0-9\+\-]*")
 if [ $val ]
 then
 	pactl set-sink-volume @DEFAULT_SINK@ "$val%"
