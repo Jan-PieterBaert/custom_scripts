@@ -2,7 +2,7 @@
 
 TARGET := ~/.local/bin
 STATIC := ~/.local/share/scripts
-install: mpv-scripts alarm-scripts i3-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts
+install: mpv-scripts alarm-scripts i3-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts keyboard-scripts
 
 mpv-scripts:
 	@echo "Installing mpv scripts"
@@ -30,6 +30,8 @@ battery-scripts:
 keyboard-scripts:
 	@echo "Installing keyboard scripts"
 	cp keyboard/keyboard_toggle ${TARGET}
+	cp keyboard/lightning/lightbar_toggle ${TARGET}
+	cp keyboard/lightning/intensity ${TARGET}
 
 date-scripts:
 	@echo "Installing date scripts"

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if test $1 == night; then
+	asusctl -k low
+	exit 0
+fi
+
+if test $1 == day; then
+	asusctl -k med
+	exit 0
+fi
+
+if test $1 == sun; then
+	asusctl -k high
+	exit 0
+fi
+
+if test $1 == off; then 
+	asusctl -k off
+	exit 0
+fi
+
+echo "Incorrect usage"
+exit 1
+
