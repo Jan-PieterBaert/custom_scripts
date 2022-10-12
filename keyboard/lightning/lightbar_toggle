@@ -8,6 +8,9 @@ fi
 
 PWCMD=$(asusctl --help | grep "led-pow[^ ]*" -o)
 
+if test PWCMD == "led-pow-2"; then
+	exit 0
+fi
 
 if test $1 == on; then
 	asusctl ${PWCMD} -l true
@@ -16,6 +19,26 @@ fi
 
 
 if test $1 == off; then
+	asusctl ${PWCMD} -l false
+	exit 0
+fi
+
+if test $1 == night; then
+	asusctl ${PWCMD} -l false
+	exit 0
+fi
+
+if test $1 == day; then
+	asusctl ${PWCMD} -l true
+	exit 0
+fi
+
+if test $1 == sun; then
+	asusctl ${PWCMD} -l true
+	exit 0
+fi
+
+if test $1 == off; then 
 	asusctl ${PWCMD} -l false
 	exit 0
 fi
