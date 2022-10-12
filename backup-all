@@ -1,4 +1,0 @@
-#!/bin/bash
-# Backup the home directory
-rsync -rP ~ --exclude stack-cloud --exclude steamgames --exclude Music --exclude Downloads --exclude Videos --exclude films --exclude formula_cache jan-pieter@akranes.local:/volume1/Jan-Pieter/simple-backup/homedir
-
