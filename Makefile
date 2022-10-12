@@ -51,4 +51,5 @@ bank-scripts:
 
 visuals-scripts:
 	@echo "Installing visuals scripts"
-	cp visuals/screenmode ${TARGET}
+	cp visuals/screen_brightness_mode ${TARGET}
+	cp visuals/brightness_mode ${TARGET}
