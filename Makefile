@@ -2,7 +2,7 @@
 
 TARGET := ~/.local/bin
 STATIC := ~/.local/share/scripts
-install: mpv-scripts alarm-scripts i3-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts keyboard-scripts
+install: mpv-scripts alarm-scripts i3-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts keyboard-scripts visuals-scripts
 
 mpv-scripts:
 	@echo "Installing mpv scripts"
@@ -48,3 +48,7 @@ weather-scripts:
 bank-scripts:
 	@echo "Installing bank script"
 	cp bank/qr-code-bank-script ${TARGET}
+
+visuals-scripts:
+	@echo "Installing visuals scripts"
+	cp visuals/screenmode ${TARGET}

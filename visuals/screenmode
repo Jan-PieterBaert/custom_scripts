@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if test $1 == sun; then
+	light -S 100
+	exit 0
+fi
+
+
+if test $1 == day; then
+	light -S 70
+	exit 0
+fi
+
+if test $1 == night; then
+	light -S 5
+	exit 0
+fi
+
+if test $1 == off; then
+	light -S 1
+	exit 0
+fi
+
+echo "Unrecognized option"
+exit 1
