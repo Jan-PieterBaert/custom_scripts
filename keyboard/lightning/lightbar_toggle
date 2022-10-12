@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if test $# -lt 1; then
+	echo "Usage: $0 <on/off>" >&2
+	exit 1
+fi
+
+
+PWCMD=$(asusctl --help | grep "led-pow[^ ]*" -o)
+
+
+if test $1 == on; then
+	asusctl ${PWCMD} -l true
+	exit 0
+fi
+
+
+if test $1 == off; then
+	asusctl ${PWCMD} -l false
+	exit 0
+fi
+
+echo "Invalid option. Usage: $0 <on/off>" >&2
