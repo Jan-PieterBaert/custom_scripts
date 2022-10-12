@@ -1,7 +1,7 @@
 # Custom scripts
 This repo contains several scripts that make our lives easier.
 
-All of these scripts can be installed to ~/.local/bin by using make.
+All of these scripts can be installed to `~/.local/bin` by using make.
 
 More information for the commands can be found in the README's in each folder.
 
