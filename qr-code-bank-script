@@ -1,0 +1,46 @@
+#!/bin/bash
+
+source ~/.config/qr-code-bank-script.conf
+# Above config file is of the format
+#name="Name"
+#iban="iban"
+#bic="ABICDEF"
+#currency="EUR"
+
+
+if test $# -lt 2; then
+	echo "Usage: $0 <amount> <message>" >&2
+	exit 1
+fi
+
+amount="$1"
+shift 1
+message="$@"
+
+echo "Showing QR code with this info:"
+echo "$(tput bold)Beneficiary$(tput sgr0)  $name"
+echo "$(tput bold)Account$(tput sgr0)      $iban (BIC: $bic)"
+echo "$(tput bold)Amount$(tput sgr0)       $amount $currency"
+echo "$(tput bold)Message$(tput sgr0)      $message"
+
+if ! [[ $amount =~ [0-9]+(\.[0-9]+)? ]]; then
+	echo "Incorrect 'amount' format, (only) provide a decimal number like '1.5'" >&2
+	exit 1
+fi
+
+
+# qrencode -s 10 -o /tmp/qr.png <<EOF
+
+qrencode -m 2 -t utf8 <<EOF
+BCD
+001
+1
+SCT
+$bic
+$name
+$iban
+$currency$amount
+CHAR
+
+$message
+EOF
