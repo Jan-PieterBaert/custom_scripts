@@ -1,6 +1,6 @@
 #!/bin/bash
 # Give the date
-counter_location="/home/jan-pieter/date_script_counter"
+counter_location="$HOME/date_script_counter"
 date +"%d/%m/%Y" | tr -d '\n'
 
 # increase the counter
