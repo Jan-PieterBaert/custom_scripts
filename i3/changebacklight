@@ -25,11 +25,11 @@ current_brightness=$(light -G)
 case $1 in
 	up)
 		target=$((current_brightness * $change_percent / 100.0))
-		[ $((target)) -ne $((current_brightness)) ] || target=$((target))
+		[ $((target)) -gt $((current_brightness + 1.0)) ] || target=$((target + 1.0))
 		;;
 	down)
 		target=$((current_brightness * 100.0 / $change_percent))
-    [ $((target)) -ne $((current_brightness)) ] || target=$((target - 1.0))
+        [ $((target)) -lt $((current_brightness - 1.0)) ] || target=$((target - 1.0))
 		;;
 esac
 
@@ -38,9 +38,9 @@ esac
 #[ $target -ge 100 ] && target=100
 
 if [ $((target)) -gt 100.0 ]; then target=100.0; fi
-if [ $((target)) -lt 1.0 ]; then target=1.0; fi
+if [ $((target)) -lt 0.5 ]; then target=0.5; fi
 
-#echo $target
+# echo $target
 
 # Smoothly set the new brightness
 # xbacklight -set "$target"
