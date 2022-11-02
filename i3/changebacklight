@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 
 # Control screen brightness in a logarithmic fashion. Linear backlight control
 # just annoys me: I want fine-grained control over low brightnesses and quickly

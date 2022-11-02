@@ -1,8 +1,11 @@
 .DEFAULT_GOAL := install
 
-TARGET := ~/.local/bin
-STATIC := ~/.local/share/scripts
-install: mpv-scripts alarm-scripts i3-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts keyboard-scripts visuals-scripts
+TARGET := ~/.local/bin/
+STATIC := ~/.local/share/scripts/
+install: mkdir mpv-scripts alarm-scripts i3-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts keyboard-scripts visuals-scripts
+
+mkdir:
+	mkdir -p ${TARGET} ${STATIC}
 
 mpv-scripts:
 	@echo "Installing mpv scripts"
