@@ -13,4 +13,9 @@ echo $image_path
 #i3lock with time and date version (i3lock-color
 #i3lock -i $image_path
 
-betterlockscreen -l
+if [ $(echo $XDG_SESSION_TYPE) == "wayland" ];
+then
+    swaylock --image $image_path --clock --indicator
+else
+    betterlockscreen -l
+fi

@@ -17,6 +17,7 @@ i3-scripts:
 	@echo "Installing i3 scripts"
 	cp i3/blur_lock ${TARGET}
 	cp i3/fancy_lock ${TARGET}
+	cp i3/sun_lock ${TARGET}
 	cp i3/changebacklight ${TARGET}
 	cp i3/suspend_lock ${TARGET}
 	cp i3/screensaver-timeout ${TARGET}
