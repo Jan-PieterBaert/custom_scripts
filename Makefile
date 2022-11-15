@@ -2,7 +2,7 @@
 
 TARGET := ~/.local/bin
 STATIC := ~/.local/share/scripts
-install: mpv-scripts alarm-scripts i3-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts keyboard-scripts visuals-scripts
+install: mpv-scripts alarm-scripts i3-scripts sway-scripts battery-scripts date-scripts audio-scripts weather-scripts bank-scripts keyboard-scripts visuals-scripts
 
 mpv-scripts:
 	@echo "Installing mpv scripts"
@@ -12,6 +12,10 @@ alarm-scripts:
 	@echo "Installing alarm scripts"
 	cp alarm/blok-pauze ${TARGET}
 	mkdir -p ${STATIC}/alarm && cp alarm/alarm.mp3 ${STATIC}/alarm/
+
+sway-scripts:
+	@echo "Installing sway scripts"
+	cp sway/sway_focus ${TARGET}
 
 i3-scripts:
 	@echo "Installing i3 scripts"
