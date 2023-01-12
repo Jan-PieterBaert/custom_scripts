@@ -17,5 +17,5 @@ if [ $(echo $XDG_SESSION_TYPE) == "wayland" ];
 then
     swaylock --image $image_path --clock --indicator
 else
-    betterlockscreen -l
+    betterlockscreen -l --off 0
 fi
