@@ -41,6 +41,7 @@ date-scripts:
 audio-scripts:
 	@echo "Installing audio scripts"
 	cp audio/changeVolume ${TARGET}
+	cp audio/playerctl.py ${TARGET}
 
 weather-scripts:
 	@echo "Installing weather script"
